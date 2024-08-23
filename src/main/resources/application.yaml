@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: Payment System POC
+  datasource:
+    driverClassName: org.postgresql.Driver
+    password: ${DB_PASS:admin_pass}
+    url: ${DB_URL:jdbc:postgresql://localhost:54321/payment_transactions_db}
+    username: ${DB_USER:payment_admin}
