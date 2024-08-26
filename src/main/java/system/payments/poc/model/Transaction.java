@@ -15,8 +15,10 @@ import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
-import system.payments.poc.model.enums.TransactionStatus;
+import system.payments.poc.enums.TransactionStatus;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,9 +48,13 @@ public class Transaction {
     private Transaction referenceTransaction;
 
     @OneToMany(mappedBy = "referenceTransaction")
-    List<Transaction> referencingTransactions;
+    private List<Transaction> referencingTransactions = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(nullable = false)
     private Merchant merchant;
+
+    public BigDecimal getAmount() {
+        return null;
+    }
 }

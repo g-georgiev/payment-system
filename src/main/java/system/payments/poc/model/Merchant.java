@@ -13,9 +13,10 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Getter;
 import lombok.Setter;
-import system.payments.poc.model.enums.MerchantStatus;
+import system.payments.poc.enums.MerchantStatus;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "merchant")
@@ -38,12 +39,12 @@ public class Merchant {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private MerchantStatus status;
+    private MerchantStatus status = MerchantStatus.ACTIVE;
 
     @Column(nullable = false)
     @PositiveOrZero
     private BigDecimal totalTransactionSum = BigDecimal.ZERO;
 
     @OneToMany(mappedBy = "merchant")
-    List<Transaction> transactions;
+    private List<Transaction> transactions = new ArrayList<>();
 }
