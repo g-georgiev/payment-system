@@ -11,6 +11,8 @@ import java.util.List;
 @Builder
 public class MerchantOutputDto {
 
+    private Long id;
+
     private String name;
 
     private String email;

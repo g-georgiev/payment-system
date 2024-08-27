@@ -13,12 +13,12 @@ import java.util.UUID;
 
 @Service
 public class AuthorizeTransactionFactory extends AbstractTransactionFactory {
-    private final CrudRepository<AuthorizeTransaction, UUID> authorizeTransactionRepository;
+    private final CrudRepository<AuthorizeTransaction, UUID> transactionRepository;
 
     public AuthorizeTransactionFactory(MerchantService merchantService,
-                                       CrudRepository<AuthorizeTransaction, UUID> authorizeTransactionRepository) {
+                                       CrudRepository<AuthorizeTransaction, UUID> transactionRepository) {
         super(merchantService);
-        this.authorizeTransactionRepository = authorizeTransactionRepository;
+        this.transactionRepository = transactionRepository;
     }
 
     @Override
@@ -30,7 +30,7 @@ public class AuthorizeTransactionFactory extends AbstractTransactionFactory {
         authorizeTransaction.setAmount(transactionInputDto.getAmount());
         authorizeTransaction.setStatus(TransactionStatus.APPROVED);
 
-        return authorizeTransactionRepository.save(authorizeTransaction);
+        return transactionRepository.save(authorizeTransaction);
     }
 
 }

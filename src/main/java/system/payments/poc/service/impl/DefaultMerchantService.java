@@ -18,6 +18,7 @@ import system.payments.poc.repository.MerchantRepository;
 import system.payments.poc.service.MerchantService;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -64,6 +65,8 @@ public class DefaultMerchantService implements MerchantService {
     @Transactional
     @Override
     public MerchantOutputPageDto getAll(Integer pageNumber, Integer pageSize, String sortColumn, Sort.Direction sortDirection) {
+        validateInput(pageNumber, pageSize, sortColumn);
+
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortDirection, sortColumn));
         Page<Merchant> merchantPage = merchantRepository.findAll(pageable);
 
@@ -83,5 +86,20 @@ public class DefaultMerchantService implements MerchantService {
         Merchant merchant = findById(id);
         merchant.setStatus(MerchantStatus.INACTIVE);
         merchantRepository.save(merchant);
+    }
+
+    private static void validateInput(Integer pageNumber, Integer pageSize, String sortColumn) {
+        if(pageNumber < 0) {
+            throw new IllegalArgumentException("Page number cannot be less than 0");
+        }
+
+        if(pageSize < 1) {
+            throw new IllegalArgumentException("Page size cannot be less than 1");
+        }
+
+        Set<String> allowedSortColumns = Set.of("total_transaction_sum", "id", "description", "email", "name", "status");
+        if (!allowedSortColumns.contains(sortColumn)) {
+            throw new IllegalArgumentException("Sort column is must be one of: " + allowedSortColumns);
+        }
     }
 }
