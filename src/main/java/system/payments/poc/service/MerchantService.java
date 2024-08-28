@@ -21,5 +21,5 @@ public interface MerchantService {
 
     MerchantOutputPageDto getAll(Integer pageNumber, Integer pageSize, String sortColumn, Sort.Direction sortDirection);
 
-    void deactivateById(Long id);
+    void deleteById(Long id);
 }

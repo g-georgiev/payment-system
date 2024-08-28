@@ -12,12 +12,16 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import system.payments.poc.enums.TransactionStatus;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -31,6 +35,11 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_on", nullable = false, updatable = false)
+    @CreationTimestamp
+    private LocalDateTime creationDate;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

@@ -16,6 +16,8 @@ import system.payments.poc.model.Transaction;
 import system.payments.poc.repository.TransactionRepository;
 import system.payments.poc.service.TransactionService;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -114,5 +116,15 @@ class DefaultTransactionServiceTest {
 
         verify(transactionRepository).findAllByMerchant_Id(merchantId);
         verify(transactionMapper).toDto(transaction);
+    }
+
+    @Test
+    void cleanupTransactions() {
+        int hours = 1;
+        LocalDateTime expectedDate = LocalDateTime.now().minusHours(hours).truncatedTo(ChronoUnit.SECONDS);
+
+        transactionService.cleanupTransactions(hours);
+
+        verify(transactionRepository).deleteByCreationDateBefore(expectedDate);
     }
 }

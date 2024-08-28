@@ -6,7 +6,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import system.payments.poc.dto.TransactionInputDto;
+import system.payments.poc.enums.MerchantStatus;
 import system.payments.poc.enums.TransactionStatus;
+import system.payments.poc.exceptions.MerchantInactiveException;
 import system.payments.poc.factory.TransactionFactory;
 import system.payments.poc.model.AuthorizeTransaction;
 import system.payments.poc.model.Merchant;
@@ -39,6 +41,7 @@ class AuthorizeTransactionFactoryTest {
     void createTransaction() {
         TransactionInputDto transactionInputDto = generateTransactionInputDto();
         Merchant merchant = new Merchant();
+        merchant.setStatus(MerchantStatus.ACTIVE);
         when(authorizeTransactionRepository.save(any(AuthorizeTransaction.class))).thenAnswer(i -> i.getArgument(0));
         when(merchantService.findById(transactionInputDto.getMerchantId())).thenReturn(merchant);
 
@@ -54,4 +57,13 @@ class AuthorizeTransactionFactoryTest {
         assertEquals(transaction.getStatus(), TransactionStatus.APPROVED);
     }
 
+    @Test
+    void createTransaction_failed_merchantInactive() {
+        TransactionInputDto transactionInputDto = generateTransactionInputDto();
+        Merchant merchant = new Merchant();
+        merchant.setStatus(MerchantStatus.INACTIVE);
+        when(merchantService.findById(transactionInputDto.getMerchantId())).thenReturn(merchant);
+
+        assertThrows(MerchantInactiveException.class, () -> transactionFactory.createTransaction(transactionInputDto));
+    }
 }

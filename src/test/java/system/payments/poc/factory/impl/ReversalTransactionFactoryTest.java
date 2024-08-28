@@ -8,7 +8,9 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import system.payments.poc.dto.TransactionInputDto;
+import system.payments.poc.enums.MerchantStatus;
 import system.payments.poc.enums.TransactionStatus;
+import system.payments.poc.exceptions.MerchantInactiveException;
 import system.payments.poc.exceptions.TransactionNotFoundException;
 import system.payments.poc.factory.TransactionFactory;
 import system.payments.poc.model.AuthorizeTransaction;
@@ -53,6 +55,7 @@ class ReversalTransactionFactoryTest {
     void createTransaction_success(String refStatus, String resultStatus, String resultRefStatus) {
         TransactionInputDto transactionInputDto = generateTransactionInputDto();
         Merchant merchant = new Merchant();
+        merchant.setStatus(MerchantStatus.ACTIVE);
 
         AuthorizeTransaction refTransaction = new AuthorizeTransaction();
         refTransaction.setStatus(TransactionStatus.valueOf(refStatus));
@@ -80,8 +83,21 @@ class ReversalTransactionFactoryTest {
     @Test
     void createTransaction_failure_refNotFound() {
         TransactionInputDto transactionInputDto = generateTransactionInputDto();
+        Merchant merchant = new Merchant();
+        merchant.setStatus(MerchantStatus.ACTIVE);
+        when(merchantService.findById(transactionInputDto.getMerchantId())).thenReturn(merchant);
         when(referenceTransactionRepository.findById(transactionInputDto.getReferenceId())).thenReturn(Optional.empty());
 
         assertThrows(TransactionNotFoundException.class, () -> transactionFactory.createTransaction(transactionInputDto));
+    }
+
+    @Test
+    void createTransaction_failed_merchantInactive() {
+        TransactionInputDto transactionInputDto = generateTransactionInputDto();
+        Merchant merchant = new Merchant();
+        merchant.setStatus(MerchantStatus.INACTIVE);
+        when(merchantService.findById(transactionInputDto.getMerchantId())).thenReturn(merchant);
+
+        assertThrows(MerchantInactiveException.class, () -> transactionFactory.createTransaction(transactionInputDto));
     }
 }

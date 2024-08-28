@@ -13,11 +13,12 @@ import org.springframework.data.domain.Sort;
 import system.payments.poc.dto.MerchantInputDto;
 import system.payments.poc.dto.MerchantOutputDto;
 import system.payments.poc.dto.MerchantOutputPageDto;
-import system.payments.poc.enums.MerchantStatus;
+import system.payments.poc.exceptions.MerchantHasTransactionsException;
 import system.payments.poc.exceptions.MerchantNotFoundException;
 import system.payments.poc.mapper.MerchantMapper;
 import system.payments.poc.model.Merchant;
 import system.payments.poc.repository.MerchantRepository;
+import system.payments.poc.repository.TransactionRepository;
 import system.payments.poc.service.MerchantService;
 
 import java.math.BigDecimal;
@@ -42,11 +43,14 @@ class DefaultMerchantServiceTest {
     private MerchantRepository merchantRepository;
 
     @Mock
+    private TransactionRepository transactionRepository;
+
+    @Mock
     private MerchantMapper merchantMapper;
 
     @BeforeEach
     void setUp() {
-        merchantService = new DefaultMerchantService(merchantRepository, merchantMapper);
+        merchantService = new DefaultMerchantService(transactionRepository, merchantRepository, merchantMapper);
     }
 
     @Test
@@ -158,16 +162,20 @@ class DefaultMerchantServiceTest {
     }
 
     @Test
-    void deactivateById() {
+    void deleteById_success() {
         Long merchantId = 1L;
-        Merchant merchant = new Merchant();
+        when(transactionRepository.existsByMerchant_Id(merchantId)).thenReturn(false);
 
-        MerchantService spy = spy(merchantService);
-        doReturn(merchant).when(spy).findById(merchantId);
+        merchantService.deleteById(merchantId);
 
-        spy.deactivateById(merchantId);
+        verify(merchantRepository).deleteById(merchantId);
+    }
 
-        verify(spy).findById(merchantId);
-        assertEquals(merchant.getStatus(), MerchantStatus.INACTIVE);
+    @Test
+    void deleteById_failed() {
+        Long merchantId = 1L;
+        when(transactionRepository.existsByMerchant_Id(merchantId)).thenReturn(true);
+
+        assertThrows(MerchantHasTransactionsException.class, () -> merchantService.deleteById(merchantId));
     }
 }

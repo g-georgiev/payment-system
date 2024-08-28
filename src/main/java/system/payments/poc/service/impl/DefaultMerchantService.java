@@ -10,11 +10,12 @@ import org.springframework.stereotype.Service;
 import system.payments.poc.dto.MerchantInputDto;
 import system.payments.poc.dto.MerchantOutputDto;
 import system.payments.poc.dto.MerchantOutputPageDto;
-import system.payments.poc.enums.MerchantStatus;
+import system.payments.poc.exceptions.MerchantHasTransactionsException;
 import system.payments.poc.exceptions.MerchantNotFoundException;
 import system.payments.poc.mapper.MerchantMapper;
 import system.payments.poc.model.Merchant;
 import system.payments.poc.repository.MerchantRepository;
+import system.payments.poc.repository.TransactionRepository;
 import system.payments.poc.service.MerchantService;
 
 import java.math.BigDecimal;
@@ -23,6 +24,7 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class DefaultMerchantService implements MerchantService {
+    private final TransactionRepository transactionRepository;
 
     private final MerchantRepository merchantRepository;
 
@@ -80,12 +82,14 @@ public class DefaultMerchantService implements MerchantService {
                 .build();
     }
 
-    @Override
     @Transactional
-    public void deactivateById(Long id) {
-        Merchant merchant = findById(id);
-        merchant.setStatus(MerchantStatus.INACTIVE);
-        merchantRepository.save(merchant);
+    @Override
+    public void deleteById(Long id) {
+        if(transactionRepository.existsByMerchant_Id(id)) {
+            throw new MerchantHasTransactionsException();
+        }
+
+        merchantRepository.deleteById(id);
     }
 
     private static void validateInput(Integer pageNumber, Integer pageSize, String sortColumn) {
