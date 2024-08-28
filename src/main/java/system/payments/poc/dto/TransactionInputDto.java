@@ -3,6 +3,7 @@ package system.payments.poc.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Builder;
 import lombok.Data;
 
@@ -25,6 +26,7 @@ public class TransactionInputDto {
     @NotNull(message = "Merchant id must not be null")
     private Long merchantId;
 
+    @Positive(message = "Amount must be grater than 0")
     private BigDecimal amount;
     private UUID referenceId;
 }

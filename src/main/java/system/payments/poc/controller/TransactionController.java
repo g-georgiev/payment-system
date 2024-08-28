@@ -1,10 +1,12 @@
 package system.payments.poc.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -24,7 +26,8 @@ public class TransactionController {
 
     @PostMapping("/{transactionType}")
     @ResponseStatus(HttpStatus.CREATED)
-    public TransactionOutputDto create(@PathVariable TransactionType transactionType, TransactionInputDto transactionInputDto) {
+    public TransactionOutputDto create(@PathVariable TransactionType transactionType,
+                                       @Valid @RequestBody TransactionInputDto transactionInputDto) {
         return transactionService.createTransaction(transactionType, transactionInputDto);
     }
 

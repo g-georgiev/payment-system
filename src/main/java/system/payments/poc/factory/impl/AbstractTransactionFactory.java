@@ -30,8 +30,8 @@ public abstract class AbstractTransactionFactory implements TransactionFactory {
         transaction.setCustomerPhone(transactionInputDto.getCustomerPhone());
     }
 
-    protected boolean approveTransaction(Transaction referenceTransaction, Transaction transaction) {
-        if(Set.of(TransactionStatus.APPROVED, TransactionStatus.REFUNDED).contains(referenceTransaction.getStatus())) {
+    protected boolean approveTransaction(Transaction referenceTransaction, Transaction transaction, Set<TransactionStatus> allowedStatuses) {
+        if(allowedStatuses.contains(referenceTransaction.getStatus())) {
             transaction.setStatus(TransactionStatus.APPROVED);
             return true;
         } else {

@@ -13,10 +13,12 @@ import system.payments.poc.enums.TransactionStatus;
 import system.payments.poc.exceptions.MerchantInactiveException;
 import system.payments.poc.exceptions.TransactionNotFoundException;
 import system.payments.poc.factory.TransactionFactory;
+import system.payments.poc.model.AuthorizeTransaction;
 import system.payments.poc.model.ChargeTransaction;
 import system.payments.poc.model.Merchant;
 import system.payments.poc.model.RefundTransaction;
 import system.payments.poc.model.Transaction;
+import system.payments.poc.repository.AuthorizeTransactionRepository;
 import system.payments.poc.repository.ChargeTransactionRepository;
 import system.payments.poc.repository.RefundTransactionRepository;
 import system.payments.poc.service.MerchantService;
@@ -42,10 +44,15 @@ class RefundTransactionFactoryTest {
 
     @Mock
     private ChargeTransactionRepository referenceTransactionRepository;
+    @Mock
+    private AuthorizeTransactionRepository authorizeTransactionRepository;
 
     @BeforeEach
     void setUp() {
-        transactionFactory = new RefundTransactionFactory(merchantService, transactionRepository, referenceTransactionRepository);
+        transactionFactory = new RefundTransactionFactory(merchantService,
+                transactionRepository,
+                referenceTransactionRepository,
+                authorizeTransactionRepository);
     }
 
 
@@ -60,25 +67,28 @@ class RefundTransactionFactoryTest {
         refTransaction.setStatus(TransactionStatus.valueOf(refStatus));
         refTransaction.setUuid(transactionInputDto.getReferenceId());
         refTransaction.setAmount(transactionInputDto.getAmount());
+        AuthorizeTransaction authorizeTransaction = new AuthorizeTransaction();
+        refTransaction.setReferenceTransaction(authorizeTransaction);
 
         when(transactionRepository.save(any(RefundTransaction.class))).thenAnswer(i -> i.getArgument(0));
-        when(referenceTransactionRepository.findById(transactionInputDto.getReferenceId())).thenReturn(Optional.of(refTransaction));
+        when(referenceTransactionRepository.findByUuid(transactionInputDto.getReferenceId())).thenReturn(Optional.of(refTransaction));
         when(merchantService.findById(transactionInputDto.getMerchantId())).thenReturn(merchant);
 
         Transaction transaction = transactionFactory.createTransaction(transactionInputDto);
 
         verify(transactionRepository).save(any(RefundTransaction.class));
         verify(referenceTransactionRepository).save(any(ChargeTransaction.class));
-        assertEquals(transaction.getClass(), RefundTransaction.class);
-        assertEquals(transaction.getCustomerEmail(), transactionInputDto.getCustomerEmail());
-        assertEquals(transaction.getCustomerPhone(), transactionInputDto.getCustomerPhone());
-        assertEquals(transaction.getMerchant(), merchant);
-        assertEquals(transaction.getReferenceTransaction(), refTransaction);
-        assertEquals(transaction.getAmount(), transactionInputDto.getAmount());
-        assertEquals(transaction.getStatus(), TransactionStatus.valueOf(resultStatus));
-        assertEquals(refTransaction.getStatus(), TransactionStatus.valueOf(resultRefStatus));
+        assertEquals(RefundTransaction.class, transaction.getClass());
+        assertEquals(transactionInputDto.getCustomerEmail(), transaction.getCustomerEmail());
+        assertEquals(transactionInputDto.getCustomerPhone(), transaction.getCustomerPhone());
+        assertEquals(merchant, transaction.getMerchant());
+        assertEquals(refTransaction, transaction.getReferenceTransaction());
+        assertEquals(transactionInputDto.getAmount(), transaction.getAmount());
+        assertEquals(TransactionStatus.valueOf(resultStatus), transaction.getStatus());
+        assertEquals(TransactionStatus.valueOf(resultRefStatus), refTransaction.getStatus());
 
         if (transaction.getStatus().equals(TransactionStatus.APPROVED)) {
+            assertEquals(TransactionStatus.valueOf(resultRefStatus), refTransaction.getReferenceTransaction().getStatus());
             verify(merchantService).updateTotalTransactionSum(merchant, transactionInputDto.getAmount().negate());
         }
     }
@@ -89,7 +99,7 @@ class RefundTransactionFactoryTest {
         Merchant merchant = new Merchant();
         merchant.setStatus(MerchantStatus.ACTIVE);
         when(merchantService.findById(transactionInputDto.getMerchantId())).thenReturn(merchant);
-        when(referenceTransactionRepository.findById(transactionInputDto.getReferenceId())).thenReturn(Optional.empty());
+        when(referenceTransactionRepository.findByUuid(transactionInputDto.getReferenceId())).thenReturn(Optional.empty());
 
         assertThrows(TransactionNotFoundException.class, () -> transactionFactory.createTransaction(transactionInputDto));
     }

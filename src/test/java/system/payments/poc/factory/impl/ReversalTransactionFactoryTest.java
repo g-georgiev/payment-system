@@ -63,21 +63,21 @@ class ReversalTransactionFactoryTest {
         refTransaction.setAmount(transactionInputDto.getAmount());
 
         when(transactionRepository.save(any(ReversalTransaction.class))).thenAnswer(i -> i.getArgument(0));
-        when(referenceTransactionRepository.findById(transactionInputDto.getReferenceId())).thenReturn(Optional.of(refTransaction));
+        when(referenceTransactionRepository.findByUuid(transactionInputDto.getReferenceId())).thenReturn(Optional.of(refTransaction));
         when(merchantService.findById(transactionInputDto.getMerchantId())).thenReturn(merchant);
 
         Transaction transaction = transactionFactory.createTransaction(transactionInputDto);
 
         verify(transactionRepository).save(any(ReversalTransaction.class));
         verify(referenceTransactionRepository).save(any(AuthorizeTransaction.class));
-        assertEquals(transaction.getClass(), ReversalTransaction.class);
-        assertEquals(transaction.getCustomerEmail(), transactionInputDto.getCustomerEmail());
-        assertEquals(transaction.getCustomerPhone(), transactionInputDto.getCustomerPhone());
-        assertEquals(transaction.getMerchant(), merchant);
-        assertEquals(transaction.getReferenceTransaction(), refTransaction);
+        assertEquals(ReversalTransaction.class, transaction.getClass());
+        assertEquals(transactionInputDto.getCustomerEmail(), transaction.getCustomerEmail());
+        assertEquals(transactionInputDto.getCustomerPhone(), transaction.getCustomerPhone());
+        assertEquals(merchant, transaction.getMerchant());
+        assertEquals(refTransaction, transaction.getReferenceTransaction());
+        assertEquals(TransactionStatus.valueOf(resultStatus), transaction.getStatus());
+        assertEquals(TransactionStatus.valueOf(resultRefStatus), refTransaction.getStatus());
         assertNull(transaction.getAmount());
-        assertEquals(transaction.getStatus(), TransactionStatus.valueOf(resultStatus));
-        assertEquals(refTransaction.getStatus(), TransactionStatus.valueOf(resultRefStatus));
     }
 
     @Test
@@ -86,7 +86,7 @@ class ReversalTransactionFactoryTest {
         Merchant merchant = new Merchant();
         merchant.setStatus(MerchantStatus.ACTIVE);
         when(merchantService.findById(transactionInputDto.getMerchantId())).thenReturn(merchant);
-        when(referenceTransactionRepository.findById(transactionInputDto.getReferenceId())).thenReturn(Optional.empty());
+        when(referenceTransactionRepository.findByUuid(transactionInputDto.getReferenceId())).thenReturn(Optional.empty());
 
         assertThrows(TransactionNotFoundException.class, () -> transactionFactory.createTransaction(transactionInputDto));
     }

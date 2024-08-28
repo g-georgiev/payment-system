@@ -75,7 +75,7 @@ class DefaultMerchantServiceTest {
         merchantService.updateTotalTransactionSum(merchant, newAmount);
 
         verify(merchantRepository).save(merchant);
-        assertEquals(newAmount, merchant.getTotalTransactionSum());
+        assertEquals(merchant.getTotalTransactionSum(), newAmount);
     }
 
     @Test
@@ -105,7 +105,7 @@ class DefaultMerchantServiceTest {
         Merchant resultMerchant = merchantService.findById(merchantId);
 
         verify(merchantRepository).findById(merchantId);
-        assertEquals(merchant, resultMerchant);
+        assertEquals(resultMerchant, merchant);
     }
 
     @Test
@@ -152,13 +152,13 @@ class DefaultMerchantServiceTest {
         MerchantOutputPageDto resultMerchants = merchantService.getAll(page, size, sortColumn, sortDirection);
 
         verify(merchantRepository).findAll(any(Pageable.class));
-        assertEquals(resultMerchants.getCurrentPage(), page);
-        assertEquals(resultMerchants.getPageSize(), size);
-        assertEquals(resultMerchants.getTotalPages(), 1);
-        assertEquals(resultMerchants.getSortColumn(), sortColumn);
-        assertEquals(resultMerchants.getSortDirection(), sortDirection);
-        assertEquals(resultMerchants.getMerchants().size(), 1);
-        assertEquals(resultMerchants.getMerchants().get(0).getId(), merchant.getId());
+        assertEquals(page, resultMerchants.getCurrentPage());
+        assertEquals(size, resultMerchants.getPageSize());
+        assertEquals(1, resultMerchants.getTotalPages());
+        assertEquals(sortColumn, resultMerchants.getSortColumn());
+        assertEquals(sortDirection, resultMerchants.getSortDirection());
+        assertEquals(1, resultMerchants.getMerchants().size());
+        assertEquals(merchant.getId(), resultMerchants.getMerchants().get(0).getId());
     }
 
     @Test

@@ -5,6 +5,7 @@ import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -45,6 +46,9 @@ public class Transaction {
     @Column(nullable = false)
     private TransactionStatus status;
 
+    @Column(name="transaction_type", insertable = false, updatable = false)
+    private String transactionType;
+
     @Column(nullable = false)
     @Email
     private String customerEmail;
@@ -52,7 +56,7 @@ public class Transaction {
     @Column(nullable = false)
     private String customerPhone;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reference_id", nullable = false)
     private Transaction referenceTransaction;
 

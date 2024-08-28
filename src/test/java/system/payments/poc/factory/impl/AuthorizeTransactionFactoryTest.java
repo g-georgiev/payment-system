@@ -48,13 +48,13 @@ class AuthorizeTransactionFactoryTest {
         Transaction transaction = transactionFactory.createTransaction(transactionInputDto);
 
         verify(authorizeTransactionRepository).save(any(AuthorizeTransaction.class));
-        assertEquals(transaction.getClass(), AuthorizeTransaction.class);
-        assertEquals(transaction.getCustomerEmail(), transactionInputDto.getCustomerEmail());
-        assertEquals(transaction.getCustomerPhone(), transactionInputDto.getCustomerPhone());
-        assertEquals(transaction.getMerchant(), merchant);
+        assertEquals(AuthorizeTransaction.class, transaction.getClass());
+        assertEquals(transactionInputDto.getCustomerEmail(), transaction.getCustomerEmail());
+        assertEquals(transactionInputDto.getCustomerPhone(), transaction.getCustomerPhone());
+        assertEquals(merchant, transaction.getMerchant());
+        assertEquals(transactionInputDto.getAmount(), transaction.getAmount());
+        assertEquals(TransactionStatus.APPROVED, transaction.getStatus());
         assertNull(transaction.getReferenceTransaction());
-        assertEquals(transaction.getAmount(), transactionInputDto.getAmount());
-        assertEquals(transaction.getStatus(), TransactionStatus.APPROVED);
     }
 
     @Test

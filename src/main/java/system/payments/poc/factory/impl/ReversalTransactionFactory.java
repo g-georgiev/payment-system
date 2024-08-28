@@ -9,18 +9,20 @@ import system.payments.poc.exceptions.TransactionNotFoundException;
 import system.payments.poc.model.AuthorizeTransaction;
 import system.payments.poc.model.ReversalTransaction;
 import system.payments.poc.model.Transaction;
+import system.payments.poc.repository.AuthorizeTransactionRepository;
 import system.payments.poc.service.MerchantService;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Service
 public class ReversalTransactionFactory extends AbstractTransactionFactory {
     private final CrudRepository<ReversalTransaction, UUID> transactionRepository;
-    private final CrudRepository<AuthorizeTransaction, UUID> referenceTransactionRepository;
+    private final AuthorizeTransactionRepository referenceTransactionRepository;
 
     public ReversalTransactionFactory(MerchantService merchantService,
                                       CrudRepository<ReversalTransaction, UUID> transactionRepository,
-                                      CrudRepository<AuthorizeTransaction, UUID> referenceTransactionRepository) {
+                                      AuthorizeTransactionRepository referenceTransactionRepository) {
         super(merchantService);
         this.transactionRepository = transactionRepository;
         this.referenceTransactionRepository = referenceTransactionRepository;
@@ -32,11 +34,11 @@ public class ReversalTransactionFactory extends AbstractTransactionFactory {
         ReversalTransaction transaction = new ReversalTransaction();
         populateCommonTransaction(transaction, transactionInputDto);
 
-        AuthorizeTransaction referenceTransaction = referenceTransactionRepository.findById(transactionInputDto.getReferenceId())
+        AuthorizeTransaction referenceTransaction = referenceTransactionRepository.findByUuid(transactionInputDto.getReferenceId())
                 .orElseThrow(TransactionNotFoundException::new);
         transaction.setReferenceTransaction(referenceTransaction);
 
-        if (approveTransaction(referenceTransaction, transaction)) {
+        if (approveTransaction(referenceTransaction, transaction, Set.of(TransactionStatus.APPROVED, TransactionStatus.REFUNDED))) {
             referenceTransaction.setStatus(TransactionStatus.REVERSED);
         }
 

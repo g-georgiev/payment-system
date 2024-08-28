@@ -62,19 +62,19 @@ class ChargeTransactionFactoryTest {
         refTransaction.setAmount(transactionInputDto.getAmount());
 
         when(transactionRepository.save(any(ChargeTransaction.class))).thenAnswer(i -> i.getArgument(0));
-        when(referenceTransactionRepository.findById(transactionInputDto.getReferenceId())).thenReturn(Optional.of(refTransaction));
+        when(referenceTransactionRepository.findByUuid(transactionInputDto.getReferenceId())).thenReturn(Optional.of(refTransaction));
         when(merchantService.findById(transactionInputDto.getMerchantId())).thenReturn(merchant);
 
         Transaction transaction = transactionFactory.createTransaction(transactionInputDto);
 
         verify(transactionRepository).save(any(ChargeTransaction.class));
-        assertEquals(transaction.getClass(), ChargeTransaction.class);
-        assertEquals(transaction.getCustomerEmail(), transactionInputDto.getCustomerEmail());
-        assertEquals(transaction.getCustomerPhone(), transactionInputDto.getCustomerPhone());
-        assertEquals(transaction.getMerchant(), merchant);
-        assertEquals(transaction.getReferenceTransaction(), refTransaction);
-        assertEquals(transaction.getAmount(), transactionInputDto.getAmount());
-        assertEquals(transaction.getStatus(), TransactionStatus.valueOf(resultStatus));
+        assertEquals(ChargeTransaction.class, transaction.getClass());
+        assertEquals(transactionInputDto.getCustomerEmail(), transaction.getCustomerEmail());
+        assertEquals(transactionInputDto.getCustomerPhone(), transaction.getCustomerPhone());
+        assertEquals(merchant, transaction.getMerchant());
+        assertEquals(refTransaction, transaction.getReferenceTransaction());
+        assertEquals(transactionInputDto.getAmount(), transaction.getAmount());
+        assertEquals(TransactionStatus.valueOf(resultStatus), transaction.getStatus());
 
         if (transaction.getStatus().equals(TransactionStatus.APPROVED)) {
             verify(merchantService).updateTotalTransactionSum(merchant, transactionInputDto.getAmount());
@@ -87,7 +87,7 @@ class ChargeTransactionFactoryTest {
         Merchant merchant = new Merchant();
         merchant.setStatus(MerchantStatus.ACTIVE);
         when(merchantService.findById(transactionInputDto.getMerchantId())).thenReturn(merchant);
-        when(referenceTransactionRepository.findById(transactionInputDto.getReferenceId())).thenReturn(Optional.empty());
+        when(referenceTransactionRepository.findByUuid(transactionInputDto.getReferenceId())).thenReturn(Optional.empty());
 
         assertThrows(TransactionNotFoundException.class, () -> transactionFactory.createTransaction(transactionInputDto));
     }

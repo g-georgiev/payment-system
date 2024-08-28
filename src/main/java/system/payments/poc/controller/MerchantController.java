@@ -1,5 +1,6 @@
 package system.payments.poc.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -8,7 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import system.payments.poc.dto.MerchantInputDto;
@@ -24,13 +27,14 @@ public class MerchantController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public MerchantOutputDto create(MerchantInputDto merchantInputDto) {
+    public MerchantOutputDto create(@Valid @RequestBody MerchantInputDto merchantInputDto) {
         return merchantService.create(merchantInputDto);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public MerchantOutputPageDto getAll(Integer pageNumber, Integer pageSize, String sortColumn, Sort.Direction sortDirection) {
+    public MerchantOutputPageDto getAll(@RequestParam Integer pageNumber, @RequestParam Integer pageSize,
+                                        @RequestParam String sortColumn, @RequestParam Sort.Direction sortDirection) {
         return merchantService.getAll(pageNumber, pageSize, sortColumn, sortDirection);
     }
 
@@ -42,7 +46,7 @@ public class MerchantController {
 
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public MerchantOutputDto update(@PathVariable Long id, MerchantInputDto merchantInputDto) {
+    public MerchantOutputDto update(@PathVariable Long id, @Valid @RequestBody MerchantInputDto merchantInputDto) {
         return merchantService.patch(id, merchantInputDto);
     }
 

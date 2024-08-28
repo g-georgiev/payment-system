@@ -7,6 +7,6 @@ public class TransactionNotFoundException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
     public TransactionNotFoundException() {
-        super("There is no merchant with that id.");
+        super("There is no transaction with that uid.");
     }
 }
