@@ -32,11 +32,12 @@ public class ReversalTransactionFactory extends AbstractTransactionFactory {
     @Transactional
     public Transaction createTransaction(TransactionInputDto transactionInputDto) {
         ReversalTransaction transaction = new ReversalTransaction();
-        populateCommonTransaction(transaction, transactionInputDto);
 
         AuthorizeTransaction referenceTransaction = referenceTransactionRepository.findByUuid(transactionInputDto.getReferenceId())
                 .orElseThrow(TransactionNotFoundException::new);
         transaction.setReferenceTransaction(referenceTransaction);
+
+        populateCommonTransaction(transaction, transactionInputDto);
 
         if (approveTransaction(referenceTransaction, transaction, Set.of(TransactionStatus.APPROVED, TransactionStatus.REFUNDED))) {
             referenceTransaction.setStatus(TransactionStatus.REVERSED);

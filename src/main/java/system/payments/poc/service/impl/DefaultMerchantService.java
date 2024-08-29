@@ -101,7 +101,7 @@ public class DefaultMerchantService implements MerchantService {
             throw new IllegalArgumentException("Page size cannot be less than 1");
         }
 
-        Set<String> allowedSortColumns = Set.of("total_transaction_sum", "id", "description", "email", "name", "status");
+        Set<String> allowedSortColumns = Set.of("totalTransactionSum", "id", "description", "email", "name", "status");
         if (!allowedSortColumns.contains(sortColumn)) {
             throw new IllegalArgumentException("Sort column is must be one of: " + allowedSortColumns);
         }

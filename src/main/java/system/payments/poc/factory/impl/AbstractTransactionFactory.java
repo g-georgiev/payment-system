@@ -11,6 +11,7 @@ import system.payments.poc.model.Transaction;
 import system.payments.poc.enums.TransactionStatus;
 import system.payments.poc.service.MerchantService;
 
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -20,14 +21,21 @@ public abstract class AbstractTransactionFactory implements TransactionFactory {
     protected final MerchantService merchantService;
 
     protected void populateCommonTransaction(Transaction transaction, TransactionInputDto transactionInputDto) {
-        Merchant merchant = merchantService.findById(transactionInputDto.getMerchantId());
-        if(!merchant.getStatus().equals(MerchantStatus.ACTIVE)) {
-            throw new MerchantInactiveException();
-        }
+        Transaction referenceTransaction = transaction.getReferenceTransaction();
+        if(Objects.nonNull(referenceTransaction)) {
+            transaction.setCustomerEmail(referenceTransaction.getCustomerEmail());
+            transaction.setCustomerPhone(referenceTransaction.getCustomerPhone());
+            transaction.setMerchant(referenceTransaction.getMerchant());
+        } else {
+            Merchant merchant = merchantService.findById(transactionInputDto.getMerchantId());
+            if (!merchant.getStatus().equals(MerchantStatus.ACTIVE)) {
+                throw new MerchantInactiveException();
+            }
 
-        transaction.setMerchant(merchant);
-        transaction.setCustomerEmail(transactionInputDto.getCustomerEmail());
-        transaction.setCustomerPhone(transactionInputDto.getCustomerPhone());
+            transaction.setMerchant(merchant);
+            transaction.setCustomerEmail(transactionInputDto.getCustomerEmail());
+            transaction.setCustomerPhone(transactionInputDto.getCustomerPhone());
+        }
     }
 
     protected boolean approveTransaction(Transaction referenceTransaction, Transaction transaction, Set<TransactionStatus> allowedStatuses) {

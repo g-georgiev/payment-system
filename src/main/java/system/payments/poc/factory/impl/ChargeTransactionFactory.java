@@ -32,11 +32,12 @@ public class ChargeTransactionFactory extends AbstractTransactionFactory {
     @Transactional
     public Transaction createTransaction(TransactionInputDto transactionInputDto) {
         ChargeTransaction chargeTransaction = new ChargeTransaction();
-        populateCommonTransaction(chargeTransaction, transactionInputDto);
 
         AuthorizeTransaction referenceTransaction = referenceTransactionRepository.findByUuid(transactionInputDto.getReferenceId())
                 .orElseThrow(TransactionNotFoundException::new);
         chargeTransaction.setReferenceTransaction(referenceTransaction);
+
+        populateCommonTransaction(chargeTransaction, transactionInputDto);
         chargeTransaction.setAmount(referenceTransaction.getAmount());
 
         if (approveTransaction(referenceTransaction, chargeTransaction, Set.of(TransactionStatus.APPROVED))) {

@@ -46,7 +46,7 @@ public class MerchantController {
 
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public MerchantOutputDto update(@PathVariable Long id, @Valid @RequestBody MerchantInputDto merchantInputDto) {
+    public MerchantOutputDto update(@PathVariable Long id, @RequestBody MerchantInputDto merchantInputDto) {
         return merchantService.patch(id, merchantInputDto);
     }
 

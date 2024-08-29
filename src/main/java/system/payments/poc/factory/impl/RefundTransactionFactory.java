@@ -38,11 +38,12 @@ public class RefundTransactionFactory extends AbstractTransactionFactory {
     @Transactional
     public Transaction createTransaction(TransactionInputDto transactionInputDto) {
         RefundTransaction transaction = new RefundTransaction();
-        populateCommonTransaction(transaction, transactionInputDto);
 
         ChargeTransaction referenceTransaction = referenceTransactionRepository.findByUuid(transactionInputDto.getReferenceId())
                 .orElseThrow(TransactionNotFoundException::new);
         transaction.setReferenceTransaction(referenceTransaction);
+
+        populateCommonTransaction(transaction, transactionInputDto);
         transaction.setAmount(referenceTransaction.getAmount());
 
         if (approveTransaction(referenceTransaction, transaction, Set.of(TransactionStatus.APPROVED))) {
