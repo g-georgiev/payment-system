@@ -2,8 +2,7 @@ package system.payments.poc.cron;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -12,9 +11,9 @@ import system.payments.poc.service.TransactionService;
 @Component
 @RequiredArgsConstructor
 @Setter
+@Slf4j
 public class TransactionCleanupCron {
 
-    private final Logger LOG = LoggerFactory.getLogger(TransactionCleanupCron.class);
     private final TransactionService transactionService;
 
     @Value("${payments.retention.period}")
@@ -23,11 +22,11 @@ public class TransactionCleanupCron {
     // Every hour
     @Scheduled(cron = "0 0 * * * *")
     public void cleanUpTransactions() {
-        LOG.info("Starting scheduler - 'cleanUpTransactions'");
+        log.info("Starting scheduler - 'cleanUpTransactions'");
 
         Integer deletedTransactions = transactionService.cleanupTransactions(PAYMENT_RETENTION_PERIOD);
 
-        LOG.info("Successfully executed - 'cleanUpTransactions'");
-        LOG.info("Deleted transactions: {}", deletedTransactions);
+        log.info("Successfully executed - 'cleanUpTransactions'");
+        log.info("Deleted transactions: {}", deletedTransactions);
     }
 }
