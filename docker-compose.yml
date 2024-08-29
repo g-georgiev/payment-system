@@ -1,7 +1,24 @@
 version: "3.9"
 services:
+
+  app:
+    build:
+      dockerfile: Dockerfile
+    image: app:test
+    container_name: payment_system_poc
+    depends_on:
+      - db
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/payment_transactions_db
+      DB_USER: payment_admin
+      DB_PASS: admin_pass
+    ports:
+      - 8080:8080
+
+
   db:
     image: postgres
+    container_name: db
     volumes:
       - pgdata:/var/lib/postgresql/data
     environment:
@@ -9,6 +26,6 @@ services:
       - POSTGRES_USER=payment_admin
       - POSTGRES_PASSWORD=admin_pass
     ports:
-      - 54321:5432
+      - 5432:5432
 volumes:
   pgdata:
