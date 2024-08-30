@@ -37,3 +37,7 @@ The application is fully containerized. To start it simply run `docker-compose u
 This will spin up and configure a PostgreSQL DB instance and build the application and expose it on port **8081** via HTTP.
 
 Should you want to run the project locally from IDE as well, it will run on the standard port 8080 and it use the same DB container.
+
+## Documentation
+
+Swagger UI available on: http://localhost:8080/swagger-ui/index.html
