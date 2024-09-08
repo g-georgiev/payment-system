@@ -15,13 +15,14 @@ import java.time.Instant;
 @Slf4j
 @Service
 public class DefaultJwtService implements JwtService {
-    private static final Duration JWT_TOKEN_VALIDITY = Duration.ofMinutes(20);
+    private final Long jwtTokenValidity;
     private final Algorithm hmac512;
     private final JWTVerifier verifier;
     private final String jwtIssuer;
 
-    public DefaultJwtService(@Value("${jwt.secret}") final String secret,
-                             @Value("${jwt.issuer}") final String jwtIssuer) {
+    public DefaultJwtService(@Value("${jwt.secret}") final String secret, @Value("${jwt.issuer}") final String jwtIssuer,
+                             @Value("${jwt.token_validity}") final Long jwtTokenValidity) {
+        this.jwtTokenValidity = jwtTokenValidity;
         this.hmac512 = Algorithm.HMAC512(secret);
         this.verifier = JWT.require(this.hmac512).build();
         this.jwtIssuer = jwtIssuer;
@@ -33,7 +34,7 @@ public class DefaultJwtService implements JwtService {
                 .withSubject(userDetails.getUsername())
                 .withIssuer(this.jwtIssuer)
                 .withIssuedAt(now)
-                .withExpiresAt(now.plusMillis(JWT_TOKEN_VALIDITY.toMillis()))
+                .withExpiresAt(now.plusMillis(Duration.ofMinutes(jwtTokenValidity).toMillis()))
                 .sign(this.hmac512);
     }
 

@@ -1,26 +1,24 @@
 package system.payments.poc.model;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import jakarta.persistence.Inheritance;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import system.payments.poc.enums.Role;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
+@Inheritance
+@DiscriminatorColumn(name = "role")
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
-public class UserCredentials {
+public abstract class UserCredentials {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,10 +29,10 @@ public class UserCredentials {
     @Column(nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role;
+    @Column(insertable = false, updatable = false)
+    private String role;
 
-    @Column(nullable = false)
-    private boolean isActive = true;
+    public void setPassword(String password) {
+        this.password = new BCryptPasswordEncoder().encode(password);
+    }
 }

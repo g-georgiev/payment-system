@@ -6,8 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import system.payments.poc.enums.Role;
-import system.payments.poc.model.UserCredentials;
+import system.payments.poc.model.Merchant;
 import system.payments.poc.repository.UserCredentialsRepository;
 
 import java.util.Optional;
@@ -30,13 +29,15 @@ public class UserSecurityDetailsServiceTest {
     }
 
     @Test
-    public void loadUserByUsername_ExistingUser(){
+    public void loadUserByUsername_ExistingUser() {
         String usernameToSearch = "merchant";
-        UserCredentials userSecurity = UserCredentials.builder().username(usernameToSearch).role(Role.MERCHANT).password("1234").build();
+        Merchant merchant = new Merchant();
+        merchant.setUsername(usernameToSearch);
 
-        when(userRepository.findByUsername(usernameToSearch)).thenReturn(Optional.of(userSecurity));
+        when(userRepository.findByUsername(usernameToSearch)).thenReturn(Optional.of(merchant));
 
         assertEquals(usernameToSearch, userDetailsService.loadUserByUsername(usernameToSearch).getUsername());
         verify(userRepository, times(1)).findByUsername(usernameToSearch);
     }
+
 }

@@ -1,22 +1,19 @@
 package system.payments.poc.service.impl;
 
-import jakarta.persistence.EntityExistsException;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import system.payments.poc.dto.UserDTO;
-import system.payments.poc.enums.Role;
-import system.payments.poc.mapper.UserMapper;
-import system.payments.poc.model.UserCredentials;
+import system.payments.poc.dto.AdminDto;
+import system.payments.poc.mapper.AdminMapper;
+import system.payments.poc.model.Admin;
 import system.payments.poc.model.security.UserSecurity;
-import system.payments.poc.repository.UserCredentialsRepository;
+import system.payments.poc.repository.AdminRepository;
 import system.payments.poc.service.JwtService;
 import system.payments.poc.service.UserCredentialsService;
 
@@ -27,14 +24,14 @@ import java.util.Objects;
 @AllArgsConstructor
 public class DefaultUserCredentialsService implements UserCredentialsService {
 
-    private UserCredentialsRepository userRepository;
+    private AdminRepository adminRepository;
 
     private AuthenticationManager authenticationManager;
 
     private UserDetailsService userDetailsService;
     private JwtService jwtTokenService;
 
-    private UserMapper userMapper;
+    private AdminMapper userMapper;
 
     @Override
     public UserSecurity getCurrentUserCredentials() {
@@ -48,49 +45,26 @@ public class DefaultUserCredentialsService implements UserCredentialsService {
         return jwtTokenService.generateToken(userDetailsService.loadUserByUsername(username));
     }
 
-
-    @Override
-    @Transactional
-    public UserDTO createUser(String username, String password) {
-        if (userRepository.existsByUsername(username)) {
-            throw new EntityExistsException(username);
-        }
-
-        return userMapper.mapToDTO(userRepository.save(UserCredentials.builder()
-                .username(username)
-                .password(prepareEncryptedPassword(password))
-                .role(Role.MERCHANT)
-                .isActive(true)
-                .build()));
-    }
-
     @Override
     @Transactional
     public void createAdmin(String username, String password) {
-        if (!userRepository.existsByUsername(username)) {
-            userMapper.mapToDTO(userRepository.save(UserCredentials.builder()
-                    .username(username)
-                    .password(prepareEncryptedPassword(password))
-                    .role(Role.ADMIN)
-                    .isActive(true)
-                    .build()));
+        if (!adminRepository.existsByUsername(username)) {
+            Admin admin = new Admin();
+            admin.setUsername(username);
+            admin.setPassword(password);
+            admin.setActive(true);
+            userMapper.mapToDTO(adminRepository.save(admin));
         }
     }
-
-    private String prepareEncryptedPassword(String password) {
-        String encryptedPassword = null;
-        if (Objects.nonNull(password)) {
-            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-            encryptedPassword = bCryptPasswordEncoder.encode(password);
-        }
-
-        return encryptedPassword;
-    }
-
 
     @Transactional
-    public UserDTO getUserByUserName(String username) {
-        return userMapper.mapToDTO(userRepository.findByUsername(username).orElseThrow(() -> new EntityNotFoundException(username)));
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public AdminDto getAdminByUserName(String username) {
+        Admin admin = adminRepository.findByUsername(username);
+        if (Objects.nonNull(admin)) {
+            return userMapper.mapToDTO(admin);
+        }
+        return null;
     }
 
 }

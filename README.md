@@ -33,10 +33,10 @@ A cronjob is implementing to control transaction retention. All transactions old
 
 ## Starting the application backend
 
-The application is fully containerized. To start it simply run `docker-compose up` in the root folder.
+The application is fully containerized. To start it simply run `docker-compose up` or `docker-compose up --build app` (rebuild app after changes) in the root folder.
 This will spin up and configure a PostgreSQL DB instance and build the application and expose it on port **8081** via HTTP.
 
-Should you want to run the project locally from IDE as well, it will run on the standard port 8080 and it use the same DB container.
+Should you want to run the project locally from IDE as well, it will run on the standard port **8080** and it use the same DB container.
 
 ## Documentation
 

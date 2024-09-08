@@ -1,98 +1,98 @@
-name,email,description
-Acme Corp,info@acmecorp.com,Leading supplier of industrial products
-Tech Innovators,support@techinnovators.com,Cutting-edge technology solutions
-GreenGrocer,contact@greengrocer.com,Organic and sustainable grocery store
-Urban Outfitters,sales@urbanoutfitters.com,Fashion and lifestyle retailer
-FreshBites,fresh@freshbites.com,Healthy meal delivery service
-Global Traders,info@globaltraders.com,International trading company
-EcoWear,service@ecowear.com,Sustainable fashion brand
-QuickFix Repairs,help@quickfix.com,Home repair and maintenance services
-HappyPaws,care@happypaws.com,Pet care and grooming services
-CityBooks,sales@citybooks.com,Independent bookstore
-Elite Fitness,contact@elitefitness.com,High-end fitness and wellness center
-TechWave,info@techwave.com,IT services and consulting
-Sunshine Travel,bookings@sunshinetravel.com,Tourism and travel agency
-EcoGarden,info@ecogarden.com,Organic gardening supplies
-Gourmet Delight,support@gourmetdelight.com,Specialty food and beverages
-SmartHome Solutions,service@smarthome.com,Home automation services
-Active Sports,info@activesports.com,Sporting goods and equipment
-ZenSpa,relax@zenspa.com,Luxury spa and wellness retreat
-Bright Ideas,contact@brightideas.com,Creative design and marketing agency
-HealthyHabits,info@healthyhabits.com,Health and wellness coaching
-Tech Savvy,support@techsavvy.com,Consumer electronics retailer
-Green Energy,info@greenenergy.com,Renewable energy solutions
-The Coffee Spot,contact@coffeespot.com,Specialty coffee shop
-Chic Boutique,sales@chicboutique.com,Fashion boutique
-Urban Garden,info@urbangarden.com,Indoor and outdoor gardening supplies
-AutoMaster,service@automaster.com,Auto repair and maintenance services
-Fresh Start,support@freshstart.com,Cleaning and home organization services
-Perfect Pixels,info@perfectpixels.com,Photography and digital art services
-Bright Beginnings,info@brightbeginnings.com,Childcare and early education center
-Fitness First,contact@fitnessfirst.com,Fitness and personal training services
-Tech Titans,support@techtitans.com,IT infrastructure and cloud services
-Nature's Way,info@naturesway.com,Natural health and wellness products
-City Cycles,sales@citycycles.com,Bicycle sales and repair services
-Urban Eats,contact@urbaneats.com,Gourmet food delivery service
-Clean Living,info@cleanliving.com,Green cleaning products and services
-Crafts & Creations,sales@craftsandcreations.com,Handmade crafts and artisan goods
-Solar Solutions,info@solarsolutions.com,Solar power installation services
-Happy Home,contact@happyhome.com,Home decor and furnishings
-Bright Minds,info@brightminds.com,Educational toys and games
-Go Green,support@gogreen.com,Environmentally friendly products
-The Gadget Shop,info@gadgetshop.com,Electronics and gadgets retailer
-Urban Vibes,sales@urbanvibes.com,Trendy fashion and accessories
-Fresh Flowers,contact@freshflowers.com,Online flower delivery service
-Perfect Pets,info@perfectpets.com,Pet food and accessories retailer
-Clean Sweep,support@cleansweep.com,Professional cleaning services
-Healthy Home,info@healthyhome.com,Healthy living products for the home
-Tech Trends,support@techtrends.com,Latest in consumer technology
-City Eats,sales@cityeats.com,Urban food delivery service
-Urban Escape,info@urbanescape.com,City-based travel and adventure experiences
-Bright Smiles,contact@brightsmiles.com,Dental care and oral hygiene products
-Happy Health,info@happyhealth.com,Health supplements and wellness products
-Fresh Produce,contact@freshproduce.com,Local and organic fruits and vegetables
-Eco-Friendly Goods,info@ecofriendlygoods.com,Sustainable household products
-City Lights,support@citylights.com,Urban lifestyle and entertainment
-Urban Crafts,info@urbancrafts.com,Handmade urban art and crafts
-Green Planet,contact@greenplanet.com,Eco-conscious lifestyle products
-The Fitness Hub,info@fitnesshub.com,Fitness equipment and gear
-Tech World,sales@techworld.com,Consumer electronics and tech accessories
-Nature's Best,info@naturesbest.com,Organic and natural foods
-Fresh Start Fitness,contact@freshstartfitness.com,Personalized fitness programs
-Urban Living,info@urbanliving.com,Modern home furnishings and decor
-The Green Room,support@greenroom.com,Eco-friendly home improvement products
-Happy Hearts,contact@happyhearts.com,Organic and natural baby products
-The Travel Hub,info@travelhub.com,Global travel and booking services
-Bright Days,info@brightdays.com,Sun protection and outdoor gear
-Urban Fresh,contact@urbanfresh.com,Farm-to-table food delivery service
-Healthy Bites,support@healthybites.com,Healthy snacks and meal options
-GreenLife,info@greenlife.com,Organic and sustainable living products
-Perfect Prints,sales@perfectprints.com,Custom printing and design services
-Urban Flavors,info@urbanflavors.com,Gourmet food and beverages
-City Comforts,contact@citycomforts.com,Urban living and lifestyle products
-Eco Shop,support@ecoshop.com,Sustainable shopping online
-Urban Trends,info@urbantrends.com,Trendy urban fashion and accessories
-Tech Masters,sales@techmasters.com,Advanced technology solutions
-Green Grove,contact@greengrove.com,Organic and eco-friendly products
-Fresh Market,info@freshmarket.com,Local and organic grocery delivery
-Happy Hour,contact@happyhour.com,Online wine and spirits retailer
-Urban Style,info@urbanstyle.com,Contemporary urban fashion
-Green Solutions,support@greensolutions.com,Sustainable living products and services
-City Fitness,info@cityfitness.com,Urban fitness and wellness center
-Urban Eats,contact@urbaneats.com,Gourmet urban food delivery
-Bright Horizons,support@brighthorizons.com,Childcare and early education services
-Eco Chic,info@ecochic.com,Sustainable fashion and accessories
-Green Thumb,contact@greenthumb.com,Gardening and horticultural supplies
-Urban Groove,info@urbangroove.com,Trendy music and entertainment
-Healthy Planet,support@healthyplanet.com,Natural health and wellness products
-The Coffee Bean,info@coffeebean.com,Specialty coffee and tea retailer
-Tech Savvy,sales@techsavvy.com,Consumer electronics and gadgets
-Urban Style,info@urbanstyle.com,Urban fashion and accessories
-Happy Kids,contact@happykids.com,Children's toys and games
-Green Earth,info@greenearth.com,Sustainable and eco-friendly products
-City Gourmet,support@citygourmet.com,Urban gourmet food and dining experiences
-Bright Spaces,info@brightspaces.com,Modern home and office furnishings
-Urban Crafters,contact@urbancrafters.com,Handmade urban crafts and designs
-The Fitness Spot,support@fitnessspot.com,Fitness and personal training services
-Green Living,info@greenliving.com,Eco-friendly and sustainable living products
-Urban Eats,sales@urbaneats.com,Urban dining and food delivery services
+username,password,name,email,description
+info@acmecorp.com,info@acmecorp.com,Acme Corp,info@acmecorp.com,Leading supplier of industrial products
+support@techinnovators.com,support@techinnovators.com,Tech Innovators,support@techinnovators.com,Cutting-edge technology solutions
+contact@greengrocer.com,contact@greengrocer.com,GreenGrocer,contact@greengrocer.com,Organic and sustainable grocery store
+sales@urbanoutfitters.com,sales@urbanoutfitters.com,Urban Outfitters,sales@urbanoutfitters.com,Fashion and lifestyle retailer
+fresh@freshbites.com,fresh@freshbites.com,FreshBites,fresh@freshbites.com,Healthy meal delivery service
+info@globaltraders.com,info@globaltraders.com,Global Traders,info@globaltraders.com,International trading company
+service@ecowear.com,service@ecowear.com,EcoWear,service@ecowear.com,Sustainable fashion brand
+help@quickfix.com,help@quickfix.com,QuickFix Repairs,help@quickfix.com,Home repair and maintenance services
+care@happypaws.com,care@happypaws.com,HappyPaws,care@happypaws.com,Pet care and grooming services
+sales@citybooks.com,sales@citybooks.com,CityBooks,sales@citybooks.com,Independent bookstore
+contact@elitefitness.com,contact@elitefitness.com,Elite Fitness,contact@elitefitness.com,High-end fitness and wellness center
+info@techwave.com,info@techwave.com,TechWave,info@techwave.com,IT services and consulting
+bookings@sunshinetravel.com,bookings@sunshinetravel.com,Sunshine Travel,bookings@sunshinetravel.com,Tourism and travel agency
+info@ecogarden.com,info@ecogarden.com,EcoGarden,info@ecogarden.com,Organic gardening supplies
+support@gourmetdelight.com,support@gourmetdelight.com,Gourmet Delight,support@gourmetdelight.com,Specialty food and beverages
+service@smarthome.com,service@smarthome.com,SmartHome Solutions,service@smarthome.com,Home automation services
+info@activesports.com,info@activesports.com,Active Sports,info@activesports.com,Sporting goods and equipment
+relax@zenspa.com,relax@zenspa.com,ZenSpa,relax@zenspa.com,Luxury spa and wellness retreat
+contact@brightideas.com,contact@brightideas.com,Bright Ideas,contact@brightideas.com,Creative design and marketing agency
+info@healthyhabits.com,info@healthyhabits.com,HealthyHabits,info@healthyhabits.com,Health and wellness coaching
+support@techsavvy.com,support@techsavvy.com,Tech Savvy,support@techsavvy.com,Consumer electronics retailer
+info@greenenergy.com,info@greenenergy.com,Green Energy,info@greenenergy.com,Renewable energy solutions
+contact@coffeespot.com,contact@coffeespot.com,The Coffee Spot,contact@coffeespot.com,Specialty coffee shop
+sales@chicboutique.com,sales@chicboutique.com,Chic Boutique,sales@chicboutique.com,Fashion boutique
+info@urbangarden.com,info@urbangarden.com,Urban Garden,info@urbangarden.com,Indoor and outdoor gardening supplies
+service@automaster.com,service@automaster.com,AutoMaster,service@automaster.com,Auto repair and maintenance services
+support@freshstart.com,support@freshstart.com,Fresh Start,support@freshstart.com,Cleaning and home organization services
+info@perfectpixels.com,info@perfectpixels.com,Perfect Pixels,info@perfectpixels.com,Photography and digital art services
+info@brightbeginnings.com,info@brightbeginnings.com,Bright Beginnings,info@brightbeginnings.com,Childcare and early education center
+contact@fitnessfirst.com,contact@fitnessfirst.com,Fitness First,contact@fitnessfirst.com,Fitness and personal training services
+support@techtitans.com,support@techtitans.com,Tech Titans,support@techtitans.com,IT infrastructure and cloud services
+info@naturesway.com,info@naturesway.com,Nature's Way,info@naturesway.com,Natural health and wellness products
+sales@citycycles.com,sales@citycycles.com,City Cycles,sales@citycycles.com,Bicycle sales and repair services
+contact@urbaneats.com,contact@urbaneats.com,Urban Eats,contact@urbaneats.com,Gourmet food delivery service
+info@cleanliving.com,info@cleanliving.com,Clean Living,info@cleanliving.com,Green cleaning products and services
+sales@craftsandcreations.com,sales@craftsandcreations.com,Crafts & Creations,sales@craftsandcreations.com,Handmade crafts and artisan goods
+info@solarsolutions.com,info@solarsolutions.com,Solar Solutions,info@solarsolutions.com,Solar power installation services
+contact@happyhome.com,contact@happyhome.com,Happy Home,contact@happyhome.com,Home decor and furnishings
+info@brightminds.com,info@brightminds.com,Bright Minds,info@brightminds.com,Educational toys and games
+support@gogreen.com,support@gogreen.com,Go Green,support@gogreen.com,Environmentally friendly products
+info@gadgetshop.com,info@gadgetshop.com,The Gadget Shop,info@gadgetshop.com,Electronics and gadgets retailer
+sales@urbanvibes.com,sales@urbanvibes.com,Urban Vibes,sales@urbanvibes.com,Trendy fashion and accessories
+contact@freshflowers.com,contact@freshflowers.com,Fresh Flowers,contact@freshflowers.com,Online flower delivery service
+info@perfectpets.com,info@perfectpets.com,Perfect Pets,info@perfectpets.com,Pet food and accessories retailer
+support@cleansweep.com,support@cleansweep.com,Clean Sweep,support@cleansweep.com,Professional cleaning services
+info@healthyhome.com,info@healthyhome.com,Healthy Home,info@healthyhome.com,Healthy living products for the home
+support@techtrends.com,support@techtrends.com,Tech Trends,support@techtrends.com,Latest in consumer technology
+sales@cityeats.com,sales@cityeats.com,City Eats,sales@cityeats.com,Urban food delivery service
+info@urbanescape.com,info@urbanescape.com,Urban Escape,info@urbanescape.com,City-based travel and adventure experiences
+contact@brightsmiles.com,contact@brightsmiles.com,Bright Smiles,contact@brightsmiles.com,Dental care and oral hygiene products
+info@happyhealth.com,info@happyhealth.com,Happy Health,info@happyhealth.com,Health supplements and wellness products
+contact@freshproduce.com,contact@freshproduce.com,Fresh Produce,contact@freshproduce.com,Local and organic fruits and vegetables
+info@ecofriendlygoods.com,info@ecofriendlygoods.com,Eco-Friendly Goods,info@ecofriendlygoods.com,Sustainable household products
+support@citylights.com,support@citylights.com,City Lights,support@citylights.com,Urban lifestyle and entertainment
+info@urbancrafts.com,info@urbancrafts.com,Urban Crafts,info@urbancrafts.com,Handmade urban art and crafts
+contact@greenplanet.com,contact@greenplanet.com,Green Planet,contact@greenplanet.com,Eco-conscious lifestyle products
+info@fitnesshub.com,info@fitnesshub.com,The Fitness Hub,info@fitnesshub.com,Fitness equipment and gear
+sales@techworld.com,sales@techworld.com,Tech World,sales@techworld.com,Consumer electronics and tech accessories
+info@naturesbest.com,info@naturesbest.com,Nature's Best,info@naturesbest.com,Organic and natural foods
+contact@freshstartfitness.com,contact@freshstartfitness.com,Fresh Start Fitness,contact@freshstartfitness.com,Personalized fitness programs
+info@urbanliving.com,info@urbanliving.com,Urban Living,info@urbanliving.com,Modern home furnishings and decor
+support@greenroom.com,support@greenroom.com,The Green Room,support@greenroom.com,Eco-friendly home improvement products
+contact@happyhearts.com,contact@happyhearts.com,Happy Hearts,contact@happyhearts.com,Organic and natural baby products
+info@travelhub.com,info@travelhub.com,The Travel Hub,info@travelhub.com,Global travel and booking services
+info@brightdays.com,info@brightdays.com,Bright Days,info@brightdays.com,Sun protection and outdoor gear
+contact@urbanfresh.com,contact@urbanfresh.com,Urban Fresh,contact@urbanfresh.com,Farm-to-table food delivery service
+support@healthybites.com,support@healthybites.com,Healthy Bites,support@healthybites.com,Healthy snacks and meal options
+info@greenlife.com,info@greenlife.com,GreenLife,info@greenlife.com,Organic and sustainable living products
+sales@perfectprints.com,sales@perfectprints.com,Perfect Prints,sales@perfectprints.com,Custom printing and design services
+info@urbanflavors.com,info@urbanflavors.com,Urban Flavors,info@urbanflavors.com,Gourmet food and beverages
+contact@citycomforts.com,contact@citycomforts.com,City Comforts,contact@citycomforts.com,Urban living and lifestyle products
+support@ecoshop.com,support@ecoshop.com,Eco Shop,support@ecoshop.com,Sustainable shopping online
+info@urbantrends.com,info@urbantrends.com,Urban Trends,info@urbantrends.com,Trendy urban fashion and accessories
+sales@techmasters.com,sales@techmasters.com,Tech Masters,sales@techmasters.com,Advanced technology solutions
+contact@greengrove.com,contact@greengrove.com,Green Grove,contact@greengrove.com,Organic and eco-friendly products
+info@freshmarket.com,info@freshmarket.com,Fresh Market,info@freshmarket.com,Local and organic grocery delivery
+contact@happyhour.com,contact@happyhour.com,Happy Hour,contact@happyhour.com,Online wine and spirits retailer
+info@urbanstyle.com,info@urbanstyle.com,Urban Style,info@urbanstyle.com,Contemporary urban fashion
+support@greensolutions.com,support@greensolutions.com,Green Solutions,support@greensolutions.com,Sustainable living products and services
+info@cityfitness.com,info@cityfitness.com,City Fitness,info@cityfitness.com,Urban fitness and wellness center
+contact@urbaneats.com,contact@urbaneats.com,Urban Eats,contact@urbaneats.com,Gourmet urban food delivery
+support@brighthorizons.com,support@brighthorizons.com,Bright Horizons,support@brighthorizons.com,Childcare and early education services
+info@ecochic.com,info@ecochic.com,Eco Chic,info@ecochic.com,Sustainable fashion and accessories
+contact@greenthumb.com,contact@greenthumb.com,Green Thumb,contact@greenthumb.com,Gardening and horticultural supplies
+info@urbangroove.com,info@urbangroove.com,Urban Groove,info@urbangroove.com,Trendy music and entertainment
+support@healthyplanet.com,support@healthyplanet.com,Healthy Planet,support@healthyplanet.com,Natural health and wellness products
+info@coffeebean.com,info@coffeebean.com,The Coffee Bean,info@coffeebean.com,Specialty coffee and tea retailer
+sales@techsavvy.com,sales@techsavvy.com,Tech Savvy,sales@techsavvy.com,Consumer electronics and gadgets
+info@urbanstyle.com,info@urbanstyle.com,Urban Style,info@urbanstyle.com,Urban fashion and accessories
+contact@happykids.com,contact@happykids.com,Happy Kids,contact@happykids.com,Children's toys and games
+info@greenearth.com,info@greenearth.com,Green Earth,info@greenearth.com,Sustainable and eco-friendly products
+support@citygourmet.com,support@citygourmet.com,City Gourmet,support@citygourmet.com,Urban gourmet food and dining experiences
+info@brightspaces.com,info@brightspaces.com,Bright Spaces,info@brightspaces.com,Modern home and office furnishings
+contact@urbancrafters.com,contact@urbancrafters.com,Urban Crafters,contact@urbancrafters.com,Handmade urban crafts and designs
+support@fitnessspot.com,support@fitnessspot.com,The Fitness Spot,support@fitnessspot.com,Fitness and personal training services
+info@greenliving.com,info@greenliving.com,Green Living,info@greenliving.com,Eco-friendly and sustainable living products
+sales@urbaneats.com,sales@urbaneats.com,Urban Eats,sales@urbaneats.com,Urban dining and food delivery services

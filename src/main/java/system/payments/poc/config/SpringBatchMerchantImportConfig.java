@@ -15,6 +15,7 @@ import org.springframework.batch.item.file.builder.MultiResourceItemReaderBuilde
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
+import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
@@ -71,7 +72,7 @@ public class SpringBatchMerchantImportConfig {
         DelimitedLineTokenizer lineTokenizer = new DelimitedLineTokenizer();
         lineTokenizer.setDelimiter(",");
         lineTokenizer.setStrict(false);
-        lineTokenizer.setNames("name", "email", "description");
+        lineTokenizer.setNames("username", "password", "name", "email", "description");
 
         BeanWrapperFieldSetMapper<Merchant> fieldSetMapper = new BeanWrapperFieldSetMapper<>();
         fieldSetMapper.setTargetType(Merchant.class);
@@ -122,4 +123,8 @@ public class SpringBatchMerchantImportConfig {
         return asyncTaskExecutor;
     }
 
+    @Bean
+    public static BeanDefinitionRegistryPostProcessor jobRegistryBeanPostProcessorRemover() {
+        return registry -> registry.removeBeanDefinition("jobRegistryBeanPostProcessor");
+    }
 }

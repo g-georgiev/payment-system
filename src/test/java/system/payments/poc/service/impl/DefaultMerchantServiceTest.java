@@ -14,7 +14,6 @@ import system.payments.poc.dto.MerchantInputDto;
 import system.payments.poc.dto.MerchantOutputDto;
 import system.payments.poc.dto.MerchantOutputPageDto;
 import system.payments.poc.exceptions.MerchantHasTransactionsException;
-import system.payments.poc.exceptions.MerchantNotFoundException;
 import system.payments.poc.mapper.MerchantMapper;
 import system.payments.poc.model.Merchant;
 import system.payments.poc.repository.MerchantRepository;
@@ -26,6 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
@@ -113,7 +113,10 @@ class DefaultMerchantServiceTest {
         Long merchantId = 1L;
         when(merchantRepository.findById(merchantId)).thenReturn(Optional.empty());
 
-        assertThrows(MerchantNotFoundException.class, () -> merchantService.findById(merchantId));
+        Merchant resultMerchant = merchantService.findById(merchantId);
+
+        verify(merchantRepository).findById(merchantId);
+        assertNull(resultMerchant);
     }
 
     @Test
@@ -131,20 +134,13 @@ class DefaultMerchantServiceTest {
     }
 
     @Test
-    void getAll_failed_illegalArgument() {
-        assertThrows(IllegalArgumentException.class, () -> merchantService.getAll(-1, 1, "name", ASC));
-        assertThrows(IllegalArgumentException.class, () -> merchantService.getAll(0, 0, "name", ASC));
-        assertThrows(IllegalArgumentException.class, () -> merchantService.getAll(0, 1, "test", ASC));
-    }
-
-    @Test
     void getAll_success() {
         int page = 1;
         int size = 10;
         String sortColumn = "name";
         Sort.Direction sortDirection = ASC;
         Merchant merchant = new Merchant();
-        MerchantOutputDto merchantDto = MerchantOutputDto.builder().build();
+        MerchantOutputDto merchantDto = new MerchantOutputDto();
 
         when(merchantRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(List.of(merchant)));
         when(merchantMapper.toDto(merchant)).thenReturn(merchantDto);

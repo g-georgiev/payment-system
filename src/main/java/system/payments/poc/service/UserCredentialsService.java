@@ -10,7 +10,5 @@ public interface UserCredentialsService {
 
     void createAdmin(String username, String password);
 
-    UserDTO getUserByUserName(String username);
-
-    UserDTO createUser(String username, String password);
+    UserDTO getAdminByUserName(String username);
 }

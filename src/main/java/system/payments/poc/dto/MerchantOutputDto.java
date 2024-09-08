@@ -1,17 +1,15 @@
 package system.payments.poc.dto;
 
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import system.payments.poc.enums.MerchantStatus;
 
 import java.math.BigDecimal;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-@Builder
-public class MerchantOutputDto {
-
-    private Long id;
+public class MerchantOutputDto extends UserDTO {
 
     private String name;
 

@@ -2,6 +2,7 @@ package system.payments.poc.mapper;
 
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import org.mapstruct.NullValuePropertyMappingStrategy;
@@ -11,6 +12,7 @@ import system.payments.poc.model.Merchant;
 
 @Mapper(componentModel = "spring", uses = {TransactionOutputMapper.class})
 public interface MerchantMapper {
+    @Mapping(target = "password", ignore = true)
     MerchantOutputDto toDto(Merchant entity);
 
     Merchant toEntity(MerchantInputDto dto);

@@ -2,11 +2,11 @@ package system.payments.poc.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import system.payments.poc.dto.UserDTO;
-import system.payments.poc.model.UserCredentials;
+import system.payments.poc.dto.AdminDto;
+import system.payments.poc.model.Admin;
 
 @Mapper(componentModel = "spring")
-public interface UserMapper {
+public interface AdminMapper {
     @Mapping(target = "password", ignore = true)
-    UserDTO mapToDTO (UserCredentials userSecurity);
+    AdminDto mapToDTO(Admin admin);
 }

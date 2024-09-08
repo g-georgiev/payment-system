@@ -4,10 +4,12 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import system.payments.poc.model.AuthorizeTransaction;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface AuthorizeTransactionRepository extends CrudRepository<AuthorizeTransaction, UUID> {
-    Optional<AuthorizeTransaction> findByUuid(UUID uuid);
+
+    boolean existsByUuid(UUID uuid);
+
+    AuthorizeTransaction findByUuid(UUID uuid);
 }

@@ -6,11 +6,16 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import system.payments.poc.enums.TransactionType;
-import system.payments.poc.factory.TransactionFactory;
-import system.payments.poc.factory.impl.AuthorizeTransactionFactory;
-import system.payments.poc.factory.impl.ChargeTransactionFactory;
-import system.payments.poc.factory.impl.RefundTransactionFactory;
-import system.payments.poc.factory.impl.ReversalTransactionFactory;
+import system.payments.poc.strategy.TransactionValidationStrategy;
+import system.payments.poc.strategy.impl.AuthorizeTransactionValidationStrategy;
+import system.payments.poc.strategy.impl.ChargeTransactionValidationStrategy;
+import system.payments.poc.strategy.impl.RefundTransactionValidationStrategy;
+import system.payments.poc.strategy.impl.ReversalTransactionValidationStrategy;
+import system.payments.poc.template.TransactionProcessingTemplate;
+import system.payments.poc.template.impl.AuthorizeTransactionProcessingTemplate;
+import system.payments.poc.template.impl.ChargeTransactionProcessingTemplate;
+import system.payments.poc.template.impl.RefundTransactionProcessingTemplate;
+import system.payments.poc.template.impl.ReversalTransactionProcessingTemplate;
 
 import java.util.Map;
 
@@ -26,11 +31,19 @@ public class BeanConfig implements ApplicationContextAware {
     private ApplicationContext applicationContext;
 
     @Bean
-    Map<TransactionType, TransactionFactory> transactionFactoryMap() {
-        return Map.of(AUTHORIZE, applicationContext.getBean(AuthorizeTransactionFactory.class),
-                CHARGE, applicationContext.getBean(ChargeTransactionFactory.class),
-                REFUND, applicationContext.getBean(RefundTransactionFactory.class),
-                REVERSAL, applicationContext.getBean(ReversalTransactionFactory.class));
+    Map<TransactionType, TransactionProcessingTemplate> transactionProcessingMap() {
+        return Map.of(AUTHORIZE, applicationContext.getBean(AuthorizeTransactionProcessingTemplate.class),
+                CHARGE, applicationContext.getBean(ChargeTransactionProcessingTemplate.class),
+                REFUND, applicationContext.getBean(RefundTransactionProcessingTemplate.class),
+                REVERSAL, applicationContext.getBean(ReversalTransactionProcessingTemplate.class));
+    }
+
+    @Bean
+    Map<TransactionType, TransactionValidationStrategy> transactionValidationStrategyMap() {
+        return Map.of(AUTHORIZE, applicationContext.getBean(AuthorizeTransactionValidationStrategy.class),
+                CHARGE, applicationContext.getBean(ChargeTransactionValidationStrategy.class),
+                REFUND, applicationContext.getBean(RefundTransactionValidationStrategy.class),
+                REVERSAL, applicationContext.getBean(ReversalTransactionValidationStrategy.class));
     }
 
 }

@@ -11,6 +11,14 @@ import system.payments.poc.enums.MerchantStatus;
 @Builder
 public class MerchantInputDto {
 
+    @NotNull(message = "Merchant username must not be null")
+    @NotEmpty(message = "Merchant username must not be empty")
+    private String username;
+
+    @NotNull(message = "Merchant password must not be null")
+    @NotEmpty(message = "Merchant password must not be empty")
+    private String password;
+
     @NotNull(message = "Merchant name must not be null")
     @NotEmpty(message = "Merchant name must not be empty")
     private String name;

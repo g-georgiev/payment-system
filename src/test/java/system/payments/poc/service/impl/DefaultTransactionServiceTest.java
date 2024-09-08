@@ -6,15 +6,19 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import system.payments.poc.dto.TransactionInputDto;
-import system.payments.poc.factory.impl.AuthorizeTransactionFactory;
-import system.payments.poc.factory.impl.ChargeTransactionFactory;
-import system.payments.poc.factory.impl.RefundTransactionFactory;
-import system.payments.poc.factory.impl.ReversalTransactionFactory;
 import system.payments.poc.mapper.TransactionOutputMapper;
 import system.payments.poc.model.AuthorizeTransaction;
+import system.payments.poc.model.Merchant;
 import system.payments.poc.model.Transaction;
+import system.payments.poc.model.UserCredentials;
+import system.payments.poc.model.security.UserSecurity;
 import system.payments.poc.repository.TransactionRepository;
 import system.payments.poc.service.TransactionService;
+import system.payments.poc.service.UserCredentialsService;
+import system.payments.poc.template.impl.AuthorizeTransactionProcessingTemplate;
+import system.payments.poc.template.impl.ChargeTransactionProcessingTemplate;
+import system.payments.poc.template.impl.RefundTransactionProcessingTemplate;
+import system.payments.poc.template.impl.ReversalTransactionProcessingTemplate;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -22,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static system.payments.poc.enums.TransactionType.AUTHORIZE;
@@ -42,79 +46,78 @@ class DefaultTransactionServiceTest {
     private TransactionOutputMapper transactionMapper;
 
     @Mock
-    private AuthorizeTransactionFactory authorizeTransactionFactory;
+    private AuthorizeTransactionProcessingTemplate authorizeTransactionProcessingTemplate;
 
     @Mock
-    private ChargeTransactionFactory chargeTransactionFactory;
+    private ChargeTransactionProcessingTemplate chargeTransactionProcessingTemplate;
 
     @Mock
-    private RefundTransactionFactory refundTransactionFactory;
+    private RefundTransactionProcessingTemplate refundTransactionProcessingTemplate;
 
     @Mock
-    private ReversalTransactionFactory reversalTransactionFactory;
+    private ReversalTransactionProcessingTemplate reversalTransactionProcessingTemplate;
+
+    @Mock
+    private UserCredentialsService userCredentialsService;
 
     @BeforeEach
     void setUp() {
         transactionService = new DefaultTransactionService(transactionRepository,
-                Map.of(AUTHORIZE, authorizeTransactionFactory, CHARGE, chargeTransactionFactory,
-                        REFUND, refundTransactionFactory, REVERSAL, reversalTransactionFactory),
-                transactionMapper);
-    }
-
-    @Test
-    void createTransaction_failed_illegalArgument() {
-        TransactionInputDto transactionDto = TransactionInputDto.builder().build();
-
-        assertThrows(IllegalArgumentException.class, () -> transactionService.createTransaction(CHARGE, transactionDto));
-        assertThrows(IllegalArgumentException.class, () -> transactionService.createTransaction(REFUND, transactionDto));
-        assertThrows(IllegalArgumentException.class, () -> transactionService.createTransaction(REVERSAL, transactionDto));
+                Map.of(AUTHORIZE, authorizeTransactionProcessingTemplate, CHARGE, chargeTransactionProcessingTemplate,
+                        REFUND, refundTransactionProcessingTemplate, REVERSAL, reversalTransactionProcessingTemplate),
+                transactionMapper, userCredentialsService);
     }
 
     @Test
     void createTransaction_success_authorize() {
-        TransactionInputDto transactionInputDto = TransactionInputDto.builder().build();
+        TransactionInputDto transactionInputDto = TransactionInputDto.builder().transactionType(AUTHORIZE).build();
 
-        transactionService.createTransaction(AUTHORIZE, transactionInputDto);
+        transactionService.createTransaction(transactionInputDto);
 
-        verify(authorizeTransactionFactory).createTransaction(transactionInputDto);
+        verify(authorizeTransactionProcessingTemplate).process(transactionInputDto);
     }
 
     @Test
     void createTransaction_success_charge() {
-        TransactionInputDto transactionInputDto = TransactionInputDto.builder().referenceId(UUID.randomUUID()).build();
+        TransactionInputDto transactionInputDto = TransactionInputDto.builder().transactionType(CHARGE).referenceId(UUID.randomUUID()).build();
 
-        transactionService.createTransaction(CHARGE, transactionInputDto);
+        transactionService.createTransaction(transactionInputDto);
 
-        verify(chargeTransactionFactory).createTransaction(transactionInputDto);
+        verify(chargeTransactionProcessingTemplate).process(transactionInputDto);
     }
 
     @Test
     void createTransaction_success_refund() {
-        TransactionInputDto transactionInputDto = TransactionInputDto.builder().referenceId(UUID.randomUUID()).build();
+        TransactionInputDto transactionInputDto = TransactionInputDto.builder().transactionType(REFUND).referenceId(UUID.randomUUID()).build();
 
-        transactionService.createTransaction(REFUND, transactionInputDto);
+        transactionService.createTransaction(transactionInputDto);
 
-        verify(refundTransactionFactory).createTransaction(transactionInputDto);
+        verify(refundTransactionProcessingTemplate).process(transactionInputDto);
     }
 
     @Test
     void createTransaction_success_reversal() {
-        TransactionInputDto transactionInputDto = TransactionInputDto.builder().referenceId(UUID.randomUUID()).build();
+        TransactionInputDto transactionInputDto = TransactionInputDto.builder().transactionType(REVERSAL).referenceId(UUID.randomUUID()).build();
 
-        transactionService.createTransaction(REVERSAL, transactionInputDto);
+        transactionService.createTransaction(transactionInputDto);
 
-        verify(reversalTransactionFactory).createTransaction(transactionInputDto);
+        verify(reversalTransactionProcessingTemplate).process(transactionInputDto);
     }
 
     @Test
     void getTransactions() {
-        Long merchantId = 1L;
+        UserSecurity userSecurity = mock(UserSecurity.class);
+        UserCredentials userCredentials = new Merchant();
+        userCredentials.setId(1L);
+        when(userCredentialsService.getCurrentUserCredentials()).thenReturn(userSecurity);
+        when(userSecurity.getUserCredentials()).thenReturn(userCredentials);
+
         Transaction transaction = new AuthorizeTransaction();
-        when(transactionRepository.findAllByMerchant_Id(merchantId)).thenReturn(List.of(transaction));
+        when(transactionRepository.findAllByMerchant_Id(userCredentials.getId())).thenReturn(List.of(transaction));
 
-        transactionService.getTransactions(merchantId);
+        transactionService.getTransactions();
 
-        verify(transactionRepository).findAllByMerchant_Id(merchantId);
+        verify(transactionRepository).findAllByMerchant_Id(userCredentials.getId());
         verify(transactionMapper).toDto(transaction);
     }
 

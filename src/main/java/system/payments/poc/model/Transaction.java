@@ -32,7 +32,7 @@ import java.util.UUID;
 @DiscriminatorColumn(name = "transaction_type")
 @Getter
 @Setter
-public class Transaction {
+public abstract class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
@@ -46,7 +46,7 @@ public class Transaction {
     @Column(nullable = false)
     private TransactionStatus status;
 
-    @Column(name="transaction_type", insertable = false, updatable = false)
+    @Column(name = "transaction_type", insertable = false, updatable = false)
     private String transactionType;
 
     @Column(nullable = false)
@@ -57,7 +57,7 @@ public class Transaction {
     private String customerPhone;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reference_id", nullable = false)
+    @JoinColumn(name = "reference_id")
     private Transaction referenceTransaction;
 
     @OneToMany(mappedBy = "referenceTransaction")

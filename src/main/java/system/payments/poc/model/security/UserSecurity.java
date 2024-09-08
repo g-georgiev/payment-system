@@ -8,6 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import system.payments.poc.enums.MerchantStatus;
+import system.payments.poc.model.Admin;
+import system.payments.poc.model.Merchant;
 import system.payments.poc.model.UserCredentials;
 
 import java.util.Collection;
@@ -23,7 +26,7 @@ public class UserSecurity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + this.userCredentials.getRole()));
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + this.userCredentials.getRole().toUpperCase()));
     }
 
     @Override
@@ -38,25 +41,29 @@ public class UserSecurity implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        log.info("isAccountNonExpired: {}", this.userCredentials.isActive());
-        return this.userCredentials.isActive();
+        return isEnabled();
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        log.info("isAccountNonLocked: {}", this.userCredentials.isActive());
-        return this.userCredentials.isActive();
+        return isEnabled();
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        log.info("isCredentialsNonExpired: {}", this.userCredentials.isActive());
-        return this.userCredentials.isActive();
+        return isEnabled();
     }
 
     @Override
     public boolean isEnabled() {
-        log.info("isEnabled: {}", this.userCredentials.isActive());
-        return this.userCredentials.isActive();
+        boolean isActive = false;
+        if (this.userCredentials instanceof Admin) {
+            isActive = ((Admin) this.userCredentials).isActive();
+        } else if (this.userCredentials instanceof Merchant) {
+            isActive = ((Merchant) this.userCredentials).getStatus().equals(MerchantStatus.ACTIVE);
+        }
+
+        log.info("isEnabled: {}", isActive);
+        return isActive;
     }
 }
