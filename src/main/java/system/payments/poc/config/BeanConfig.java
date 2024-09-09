@@ -5,6 +5,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import system.payments.poc.enums.TransactionType;
 import system.payments.poc.strategy.TransactionValidationStrategy;
 import system.payments.poc.strategy.impl.AuthorizeTransactionValidationStrategy;
@@ -19,14 +22,16 @@ import system.payments.poc.template.impl.ReversalTransactionProcessingTemplate;
 
 import java.util.Map;
 
+import static org.springframework.http.HttpMethod.*;
 import static system.payments.poc.enums.TransactionType.AUTHORIZE;
 import static system.payments.poc.enums.TransactionType.CHARGE;
 import static system.payments.poc.enums.TransactionType.REFUND;
 import static system.payments.poc.enums.TransactionType.REVERSAL;
 
+@EnableWebMvc
 @Setter
 @Configuration
-public class BeanConfig implements ApplicationContextAware {
+public class BeanConfig implements ApplicationContextAware, WebMvcConfigurer {
 
     private ApplicationContext applicationContext;
 
@@ -46,4 +51,12 @@ public class BeanConfig implements ApplicationContextAware {
                 REVERSAL, applicationContext.getBean(ReversalTransactionValidationStrategy.class));
     }
 
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**").allowedOrigins("*")
+                .allowedMethods(OPTIONS.name(), POST.name(), GET.name(), PUT.name(), PATCH.name(), DELETE.name(), HEAD.name())
+                .allowedHeaders("Content-Type", "Origin", "X-Requested-With", "Accept", "Authorization",
+                        "Access-Control-Allow-Methods", "Access-Control-Allow-Headers", "Access-Control-Allow-Origin");
+    }
 }

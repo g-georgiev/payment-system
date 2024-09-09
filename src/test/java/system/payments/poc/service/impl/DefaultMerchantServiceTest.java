@@ -1,10 +1,10 @@
 package system.payments.poc.service.impl;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageImpl;
@@ -19,6 +19,7 @@ import system.payments.poc.model.Merchant;
 import system.payments.poc.repository.MerchantRepository;
 import system.payments.poc.repository.TransactionRepository;
 import system.payments.poc.service.MerchantService;
+import system.payments.poc.service.UserCredentialsService;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -37,8 +38,6 @@ import static org.springframework.data.domain.Sort.Direction.ASC;
 @ExtendWith(MockitoExtension.class)
 class DefaultMerchantServiceTest {
 
-    private MerchantService merchantService;
-
     @Mock
     private MerchantRepository merchantRepository;
 
@@ -48,10 +47,11 @@ class DefaultMerchantServiceTest {
     @Mock
     private MerchantMapper merchantMapper;
 
-    @BeforeEach
-    void setUp() {
-        merchantService = new DefaultMerchantService(transactionRepository, merchantRepository, merchantMapper);
-    }
+    @Mock
+    private UserCredentialsService userCredentialsService;
+
+    @InjectMocks
+    private DefaultMerchantService merchantService;
 
     @Test
     void create() {

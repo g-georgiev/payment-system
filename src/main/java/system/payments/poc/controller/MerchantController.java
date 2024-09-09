@@ -1,5 +1,6 @@
 package system.payments.poc.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
@@ -31,12 +32,15 @@ public class MerchantController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public MerchantOutputDto create(@Valid @RequestBody MerchantInputDto merchantInputDto) {
+    @Operation(summary = "Create a new merchant. Endpoint is idempotent")
+    public MerchantOutputDto create(@io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Information about the merchant to be created", required = true)
+                                    @Valid @RequestBody MerchantInputDto merchantInputDto) {
         return merchantService.create(merchantInputDto);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Get information about all merchants. Supports paging and sorting")
     public MerchantOutputPageDto getAll(@RequestParam @Min(0) Integer pageNumber, @RequestParam @Min(1) Integer pageSize,
                                         @RequestParam @Pattern(regexp = "^id|email|username|status|totalTransactionSum$") String sortColumn,
                                         @RequestParam Sort.Direction sortDirection) {
@@ -45,18 +49,28 @@ public class MerchantController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Get information about specific merchant by ID")
     public MerchantOutputDto getById(@PathVariable Long id) {
         return merchantService.getById(id);
     }
 
+    @GetMapping("/current")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Get information about the currently authenticated merchant")
+    public MerchantOutputDto getCurrent() {
+        return merchantService.getCurrent();
+    }
+
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
+    @Operation(summary = "Update merchant data. Only data provided will be updated. Merchant will NOT be recreated (PATCH)")
     public MerchantOutputDto update(@PathVariable Long id, @RequestBody MerchantInputDto merchantInputDto) {
         return merchantService.patch(id, merchantInputDto);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Delete merchant by ID. Merchant will NOT be deleted if they have existing transactions")
     public void delete(@PathVariable Long id) {
         merchantService.deleteById(id);
     }

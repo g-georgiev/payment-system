@@ -1,5 +1,6 @@
 package system.payments.poc.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Sort;
 import system.payments.poc.dto.MerchantInputDto;
 import system.payments.poc.dto.MerchantOutputDto;
@@ -18,6 +19,9 @@ public interface MerchantService {
     Merchant findById(Long id);
 
     MerchantOutputDto getById(Long id);
+
+    @Transactional
+    MerchantOutputDto getCurrent();
 
     MerchantOutputPageDto getAll(Integer pageNumber, Integer pageSize, String sortColumn, Sort.Direction sortDirection);
 

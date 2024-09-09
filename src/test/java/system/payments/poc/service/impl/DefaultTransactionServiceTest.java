@@ -105,7 +105,7 @@ class DefaultTransactionServiceTest {
     }
 
     @Test
-    void getTransactions() {
+    void getCurrentUserTransactions() {
         UserSecurity userSecurity = mock(UserSecurity.class);
         UserCredentials userCredentials = new Merchant();
         userCredentials.setId(1L);
@@ -113,11 +113,11 @@ class DefaultTransactionServiceTest {
         when(userSecurity.getUserCredentials()).thenReturn(userCredentials);
 
         Transaction transaction = new AuthorizeTransaction();
-        when(transactionRepository.findAllByMerchant_Id(userCredentials.getId())).thenReturn(List.of(transaction));
+        when(transactionRepository.findAllByMerchant_IdOrderByCreationDate(userCredentials.getId())).thenReturn(List.of(transaction));
 
-        transactionService.getTransactions();
+        transactionService.getCurrentUserTransactions();
 
-        verify(transactionRepository).findAllByMerchant_Id(userCredentials.getId());
+        verify(transactionRepository).findAllByMerchant_IdOrderByCreationDate(userCredentials.getId());
         verify(transactionMapper).toDto(transaction);
     }
 

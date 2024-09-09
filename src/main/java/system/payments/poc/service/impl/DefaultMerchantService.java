@@ -17,6 +17,7 @@ import system.payments.poc.model.Merchant;
 import system.payments.poc.repository.MerchantRepository;
 import system.payments.poc.repository.TransactionRepository;
 import system.payments.poc.service.MerchantService;
+import system.payments.poc.service.UserCredentialsService;
 
 import java.math.BigDecimal;
 
@@ -28,6 +29,8 @@ public class DefaultMerchantService implements MerchantService {
     private final MerchantRepository merchantRepository;
 
     private final MerchantMapper merchantMapper;
+
+    private final UserCredentialsService userCredentialsService;
 
     @Override
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -62,9 +65,17 @@ public class DefaultMerchantService implements MerchantService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
     public MerchantOutputDto getById(Long id) {
         return merchantMapper.toDto(findById(id));
+    }
+
+    @Transactional
+    @PreAuthorize("hasRole('ROLE_MERCHANT')")
+    @Override
+    public MerchantOutputDto getCurrent() {
+        return merchantMapper.toDto(findById(userCredentialsService.getCurrentUserCredentials().getUserCredentials().getId()));
     }
 
     @Transactional

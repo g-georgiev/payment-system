@@ -1,9 +1,11 @@
 package system.payments.poc.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,14 +25,24 @@ public class TransactionController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TransactionOutputDto create(@Valid @RequestBody TransactionInputDto transactionInputDto) {
+    @Operation(summary = "Create a transaction. Endpoint is NOT idempotent")
+    public TransactionOutputDto create(@io.swagger.v3.oas.annotations.parameters.RequestBody(description = "New transaction data. Transaction type is provided here. Validations and required data depends on the type of transaction")
+                                       @Valid @RequestBody TransactionInputDto transactionInputDto) {
         return transactionService.createTransaction(transactionInputDto);
     }
 
     @GetMapping("/merchant/current")
     @ResponseStatus(HttpStatus.OK)
-    public List<TransactionOutputDto> getTransactions() {
-        return transactionService.getTransactions();
+    @Operation(summary = "Get all transactions for the currently authenticated merchant")
+    public List<TransactionOutputDto> getCurrentUserTransactions() {
+        return transactionService.getCurrentUserTransactions();
+    }
+
+    @GetMapping("/merchant/{merchantId}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Get all transactions by merchant ID")
+    public List<TransactionOutputDto> getTransactions(@PathVariable Long merchantId) {
+        return transactionService.getTransactions(merchantId);
     }
 
 }

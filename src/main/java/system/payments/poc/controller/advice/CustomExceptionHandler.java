@@ -2,6 +2,7 @@ package system.payments.poc.controller.advice;
 
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -22,8 +24,10 @@ import system.payments.poc.exceptions.MerchantHasTransactionsException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
@@ -38,7 +42,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(createErrorResponseBody(ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({AuthorizationDeniedException.class, LockedException.class})
+    @ExceptionHandler({AuthorizationDeniedException.class, LockedException.class, BadCredentialsException.class})
     @ResponseBody
     public ResponseEntity<ErrorDTO> handleAuthException(Exception ex) {
         log.error("Authorization exception", ex);
@@ -48,9 +52,11 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers,
                                                                HttpStatusCode status, WebRequest request) {
-        Object[] detailMessageArguments = ex.getDetailMessageArguments();
-        if (Objects.nonNull(detailMessageArguments) && detailMessageArguments.length > 0) {
-            return new ResponseEntity<>(createErrorResponseBody((String) detailMessageArguments[0]), HttpStatus.BAD_REQUEST);
+        if(Objects.nonNull(ex.getDetailMessageArguments())) {
+            Optional<String> firsterror = Arrays.stream(ex.getDetailMessageArguments()).map(Object::toString).filter(StringUtils::isNotBlank).findFirst();
+            if (firsterror.isPresent()) {
+                return new ResponseEntity<>(createErrorResponseBody(firsterror.get()), HttpStatus.BAD_REQUEST);
+            }
         }
 
         List<String> errors = ex.getBindingResult().getFieldErrors().stream()

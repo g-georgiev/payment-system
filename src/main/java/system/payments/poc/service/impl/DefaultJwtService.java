@@ -11,6 +11,7 @@ import system.payments.poc.service.JwtService;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 
 @Slf4j
 @Service
@@ -32,6 +33,7 @@ public class DefaultJwtService implements JwtService {
         final Instant now = Instant.now();
         return JWT.create()
                 .withSubject(userDetails.getUsername())
+                .withClaim("role", new ArrayList<>(userDetails.getAuthorities()).get(0).getAuthority().toUpperCase().substring(5))
                 .withIssuer(this.jwtIssuer)
                 .withIssuedAt(now)
                 .withExpiresAt(now.plusMillis(Duration.ofMinutes(jwtTokenValidity).toMillis()))

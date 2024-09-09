@@ -11,7 +11,7 @@ import java.util.UUID;
 @Repository
 public interface TransactionRepository extends CrudRepository<Transaction, UUID> {
 
-    List<Transaction> findAllByMerchant_Id(Long merchantId);
+    List<Transaction> findAllByMerchant_IdOrderByCreationDate(Long merchantId);
 
     boolean existsByMerchant_Id(Long merchant_id);
 

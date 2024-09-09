@@ -30,7 +30,7 @@ public class DefaultJwtServiceTest {
     public void generateAndValidateTest() {
         String username = "username";
         UserDetails userDetails = new User(username, "password",
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE")));
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN")));
 
         String token = jwtTokenService.generateToken(userDetails);
         String usernameFromToken = jwtTokenService.validateTokenAndGetUsername(token);
