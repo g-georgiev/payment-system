@@ -1,8 +1,10 @@
 package system.payments.poc.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import system.payments.poc.enums.TransactionStatus;
 
 import java.math.BigDecimal;
@@ -11,6 +13,8 @@ import java.util.UUID;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class TransactionOutputDto {
 
     private UUID uuid;
