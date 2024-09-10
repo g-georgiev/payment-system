@@ -26,7 +26,7 @@ public class Merchant extends UserCredentials {
     @Column
     private String name;
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     @Email
     private String email;
 

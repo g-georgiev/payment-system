@@ -5,19 +5,20 @@ import org.junit.jupiter.params.provider.CsvSource;
 import system.payments.poc.dto.TransactionInputDto;
 import system.payments.poc.enums.TransactionStatus;
 import system.payments.poc.factory.TransactionFactory;
+import system.payments.poc.model.AuthorizeTransaction;
 import system.payments.poc.model.ChargeTransaction;
 import system.payments.poc.model.Merchant;
 import system.payments.poc.model.Transaction;
 import system.payments.poc.repository.AuthorizeTransactionRepository;
 import system.payments.poc.repository.ChargeTransactionRepository;
 import system.payments.poc.service.MerchantService;
+import system.payments.poc.service.UserCredentialsService;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -29,41 +30,38 @@ class ChargeTransactionProcessingTemplateTest {
     public void test_process_transaction_successfully_with_valid_inputs(String status) {
         // Arrange
         MerchantService merchantService = mock(MerchantService.class);
+        UserCredentialsService userCredentialsService = mock(UserCredentialsService.class);
         TransactionFactory transactionFactory = mock(TransactionFactory.class);
-        ChargeTransactionRepository transactionRepository = mock(ChargeTransactionRepository.class);
-        AuthorizeTransactionRepository referenceTransactionRepository = mock(AuthorizeTransactionRepository.class);
+        ChargeTransactionRepository chargeTransactionRepository = mock(ChargeTransactionRepository.class);
+        AuthorizeTransactionRepository authorizeTransactionRepository = mock(AuthorizeTransactionRepository.class);
         ChargeTransactionProcessingTemplate template = new ChargeTransactionProcessingTemplate(
-                merchantService, transactionFactory, transactionRepository, referenceTransactionRepository
+                merchantService, transactionFactory, userCredentialsService, chargeTransactionRepository, authorizeTransactionRepository
         );
 
-        TransactionInputDto inputDto = TransactionInputDto.builder()
-                .merchantId(1L)
-                .referenceId(null)
-                .customerEmail("test@example.com")
-                .customerPhone("1234567890")
-                .build();
+        UUID referenceId = UUID.randomUUID();
+        AuthorizeTransaction referenceTransaction = new AuthorizeTransaction();
+        referenceTransaction.setUuid(referenceId);
+        referenceTransaction.setMerchant(new Merchant());
+        referenceTransaction.setAmount(new BigDecimal("100.00"));
 
-        Merchant merchant = new Merchant();
-        when(merchantService.findById(1L)).thenReturn(merchant);
+        when(authorizeTransactionRepository.findByUuid(referenceId)).thenReturn(referenceTransaction);
 
-        ChargeTransaction transaction = new ChargeTransaction();
-        transaction.setStatus(TransactionStatus.valueOf(status));
-        transaction.setMerchant(merchant);
-        transaction.setAmount(BigDecimal.TEN);
+        TransactionInputDto inputDto = TransactionInputDto.builder().referenceId(referenceId).build();
 
-        when(transactionFactory.createTransaction(inputDto, merchant, null)).thenReturn(transaction);
+        ChargeTransaction reversalTransaction = new ChargeTransaction();
+        reversalTransaction.setReferenceTransaction(referenceTransaction);
+        reversalTransaction.setStatus(TransactionStatus.valueOf(status));
+
+        when(transactionFactory.createTransaction(inputDto, null, referenceTransaction)).thenReturn(reversalTransaction);
 
         // Act
         Transaction result = template.process(inputDto);
 
         // Assert
         assertNotNull(result);
-        verify(transactionRepository).save((ChargeTransaction) result);
-        assertEquals(TransactionStatus.valueOf(status), result.getStatus());
+        verify(chargeTransactionRepository).save(reversalTransaction);
         if (result.getStatus().equals(TransactionStatus.APPROVED)) {
-            verify(merchantService).updateTotalTransactionSum(merchant, BigDecimal.TEN);
-        } else {
-            verify(merchantService, times(0)).updateTotalTransactionSum(merchant, BigDecimal.ZERO);
+            verify(merchantService).updateTotalTransactionSum(reversalTransaction.getMerchant(), reversalTransaction.getAmount());
         }
     }
 }

@@ -17,7 +17,6 @@ public class TransactionInputDto {
     private TransactionType transactionType;
     private String customerEmail;
     private String customerPhone;
-    private Long merchantId;
     private BigDecimal amount;
     private UUID referenceId;
 }

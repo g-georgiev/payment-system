@@ -18,6 +18,7 @@ import system.payments.poc.repository.AuthorizeTransactionRepository;
 import system.payments.poc.repository.ChargeTransactionRepository;
 import system.payments.poc.repository.RefundTransactionRepository;
 import system.payments.poc.service.MerchantService;
+import system.payments.poc.service.UserCredentialsService;
 
 import java.util.UUID;
 
@@ -32,6 +33,9 @@ public class RefundTransactionProcessingTemplateTest {
 
     @Mock
     private MerchantService merchantService;
+
+    @Mock
+    private UserCredentialsService userCredentialsService;
 
     @Mock
     private TransactionFactory transactionFactory;
@@ -64,7 +68,6 @@ public class RefundTransactionProcessingTemplateTest {
 
         TransactionInputDto transactionInputDto = TransactionInputDto.builder()
                 .referenceId(referenceId)
-                .merchantId(1L)
                 .build();
 
         when(referenceTransactionRepository.findByUuid(referenceId)).thenReturn(chargeTransaction);

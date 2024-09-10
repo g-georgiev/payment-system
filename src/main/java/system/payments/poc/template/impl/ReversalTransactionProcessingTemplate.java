@@ -9,7 +9,7 @@ import system.payments.poc.model.ReversalTransaction;
 import system.payments.poc.model.Transaction;
 import system.payments.poc.repository.AuthorizeTransactionRepository;
 import system.payments.poc.repository.ReversalTransactionRepository;
-import system.payments.poc.service.MerchantService;
+import system.payments.poc.service.UserCredentialsService;
 import system.payments.poc.template.TransactionProcessingTemplate;
 
 import java.util.UUID;
@@ -20,11 +20,11 @@ public class ReversalTransactionProcessingTemplate extends TransactionProcessing
     private final ReversalTransactionRepository transactionRepository;
     private final AuthorizeTransactionRepository referenceTransactionRepository;
 
-    public ReversalTransactionProcessingTemplate(MerchantService merchantService,
+    public ReversalTransactionProcessingTemplate(UserCredentialsService userCredentialsService,
                                                  TransactionFactory reversalTransactionFactory,
                                                  ReversalTransactionRepository transactionRepository,
                                                  AuthorizeTransactionRepository referenceTransactionRepository) {
-        super(merchantService, reversalTransactionFactory);
+        super(userCredentialsService, reversalTransactionFactory);
         this.transactionRepository = transactionRepository;
         this.referenceTransactionRepository = referenceTransactionRepository;
     }

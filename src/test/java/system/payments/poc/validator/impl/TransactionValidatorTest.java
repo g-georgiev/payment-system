@@ -32,7 +32,6 @@ class TransactionValidatorTest {
 
         TransactionInputDto transactionInputDto = TransactionInputDto.builder()
                 .transactionType(TransactionType.AUTHORIZE)
-                .merchantId(1L)
                 .build();
 
         when(validationStrategyMap.get(TransactionType.AUTHORIZE)).thenReturn(validationStrategy);
@@ -59,7 +58,6 @@ class TransactionValidatorTest {
 
         TransactionInputDto transactionInputDto = TransactionInputDto.builder()
                 .transactionType(TransactionType.AUTHORIZE)
-                .merchantId(1L)
                 .build();
 
         when(validationStrategyMap.get(TransactionType.AUTHORIZE)).thenReturn(validationStrategy);

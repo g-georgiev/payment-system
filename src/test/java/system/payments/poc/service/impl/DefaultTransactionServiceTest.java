@@ -113,11 +113,11 @@ class DefaultTransactionServiceTest {
         when(userSecurity.getUserCredentials()).thenReturn(userCredentials);
 
         Transaction transaction = new AuthorizeTransaction();
-        when(transactionRepository.findAllByMerchant_IdOrderByCreationDate(userCredentials.getId())).thenReturn(List.of(transaction));
+        when(transactionRepository.findAllByMerchant_IdOrderByCreationDateDesc(userCredentials.getId())).thenReturn(List.of(transaction));
 
         transactionService.getCurrentUserTransactions();
 
-        verify(transactionRepository).findAllByMerchant_IdOrderByCreationDate(userCredentials.getId());
+        verify(transactionRepository).findAllByMerchant_IdOrderByCreationDateDesc(userCredentials.getId());
         verify(transactionMapper).toDto(transaction);
     }
 

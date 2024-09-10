@@ -9,57 +9,25 @@ import system.payments.poc.dto.TransactionInputDto;
 import system.payments.poc.enums.MerchantStatus;
 import system.payments.poc.enums.TransactionType;
 import system.payments.poc.model.Merchant;
-import system.payments.poc.service.MerchantService;
+import system.payments.poc.model.security.UserSecurity;
+import system.payments.poc.service.UserCredentialsService;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class AuthorizeTransactionValidationStrategyTest {
 
     @Mock
-    private MerchantService merchantService;
+    private UserCredentialsService userCredentialsService;
 
     @InjectMocks
     private AuthorizeTransactionValidationStrategy strategy;
-
-    // Transaction with missing merchant id returns false
-    @Test
-    public void transaction_with_missing_merchant_id_returns_false() {
-        // Arrange
-        TransactionInputDto transactionInputDto = TransactionInputDto.builder()
-                .transactionType(TransactionType.AUTHORIZE)
-                .merchantId(null)
-                .build();
-
-        // Act
-        String result = strategy.validateTransaction(transactionInputDto);
-
-        // Assert
-        assertEquals("MerchantId cannot be null for AUTHORIZE Transactions", result);
-    }
-
-    // Transaction with missing merchant returns false
-    @Test
-    public void transaction_with_missing_merchant_returns_false() {
-        // Arrange
-        TransactionInputDto transactionInputDto = TransactionInputDto.builder()
-                .transactionType(TransactionType.AUTHORIZE)
-                .merchantId(1L)
-                .build();
-
-        when(merchantService.findById(1L)).thenReturn(null);
-
-        // Act
-        String result = strategy.validateTransaction(transactionInputDto);
-
-        // Assert
-        assertEquals("Merchant with id 1 not found", result);
-    }
 
     // Transaction with inactive merchant returns false
     @Test
@@ -67,13 +35,14 @@ public class AuthorizeTransactionValidationStrategyTest {
         // Arrange
         TransactionInputDto transactionInputDto = TransactionInputDto.builder()
                 .transactionType(TransactionType.AUTHORIZE)
-                .merchantId(1L)
                 .build();
 
-        Merchant inactiveMerchant = new Merchant();
-        inactiveMerchant.setId(1L);
-        inactiveMerchant.setStatus(MerchantStatus.INACTIVE);
-        when(merchantService.findById(1L)).thenReturn(inactiveMerchant);
+        Merchant merchant = new Merchant();
+        merchant.setId(1L);
+        merchant.setStatus(MerchantStatus.INACTIVE);
+        UserSecurity userSecurity = mock(UserSecurity.class);
+        when(userCredentialsService.getCurrentUserCredentials()).thenReturn(userSecurity);
+        when(userSecurity.getUserCredentials()).thenReturn(merchant);
 
         // Act
         String result = strategy.validateTransaction(transactionInputDto);
@@ -88,14 +57,15 @@ public class AuthorizeTransactionValidationStrategyTest {
     public void test_validate_transaction_with_valid_amount_and_referenceId_returns_null() {
         TransactionInputDto transaction = TransactionInputDto.builder()
                 .amount(new BigDecimal("100.00"))
-                .merchantId(1L)
                 .referenceId(null)
                 .build();
 
-        Merchant inactiveMerchant = new Merchant();
-        inactiveMerchant.setId(1L);
-        inactiveMerchant.setStatus(MerchantStatus.ACTIVE);
-        when(merchantService.findById(1L)).thenReturn(inactiveMerchant);
+        Merchant merchant = new Merchant();
+        merchant.setId(1L);
+        merchant.setStatus(MerchantStatus.ACTIVE);
+        UserSecurity userSecurity = mock(UserSecurity.class);
+        when(userCredentialsService.getCurrentUserCredentials()).thenReturn(userSecurity);
+        when(userSecurity.getUserCredentials()).thenReturn(merchant);
 
         String result = strategy.validateTransaction(transaction);
         assertNull(result);
@@ -106,14 +76,15 @@ public class AuthorizeTransactionValidationStrategyTest {
     public void validate_transaction_with_null_amount_returns_appropriate_error_message() {
         TransactionInputDto transaction = TransactionInputDto.builder()
                 .amount(null)
-                .merchantId(1L)
                 .referenceId(null)
                 .build();
 
-        Merchant inactiveMerchant = new Merchant();
-        inactiveMerchant.setId(1L);
-        inactiveMerchant.setStatus(MerchantStatus.ACTIVE);
-        when(merchantService.findById(1L)).thenReturn(inactiveMerchant);
+        Merchant merchant = new Merchant();
+        merchant.setId(1L);
+        merchant.setStatus(MerchantStatus.ACTIVE);
+        UserSecurity userSecurity = mock(UserSecurity.class);
+        when(userCredentialsService.getCurrentUserCredentials()).thenReturn(userSecurity);
+        when(userSecurity.getUserCredentials()).thenReturn(merchant);
 
         String result = strategy.validateTransaction(transaction);
         assertEquals("Amount cannot be null for AUTHORIZE Transactions", result);
@@ -124,14 +95,15 @@ public class AuthorizeTransactionValidationStrategyTest {
     public void test_validate_transaction_with_amount_as_zero() {
         TransactionInputDto transaction = TransactionInputDto.builder()
                 .amount(BigDecimal.ZERO)
-                .merchantId(1L)
                 .referenceId(null)
                 .build();
 
-        Merchant inactiveMerchant = new Merchant();
-        inactiveMerchant.setId(1L);
-        inactiveMerchant.setStatus(MerchantStatus.ACTIVE);
-        when(merchantService.findById(1L)).thenReturn(inactiveMerchant);
+        Merchant merchant = new Merchant();
+        merchant.setId(1L);
+        merchant.setStatus(MerchantStatus.ACTIVE);
+        UserSecurity userSecurity = mock(UserSecurity.class);
+        when(userCredentialsService.getCurrentUserCredentials()).thenReturn(userSecurity);
+        when(userSecurity.getUserCredentials()).thenReturn(merchant);
 
         String result = strategy.validateTransaction(transaction);
         assertEquals("Amount must be positive for AUTHORIZE Transactions", result);
@@ -142,14 +114,15 @@ public class AuthorizeTransactionValidationStrategyTest {
     public void validate_transaction_with_non_null_referenceId_returns_appropriate_error_message() {
         TransactionInputDto transaction = TransactionInputDto.builder()
                 .amount(new BigDecimal("100.00"))
-                .merchantId(1L)
                 .referenceId(UUID.randomUUID())
                 .build();
 
-        Merchant inactiveMerchant = new Merchant();
-        inactiveMerchant.setId(1L);
-        inactiveMerchant.setStatus(MerchantStatus.ACTIVE);
-        when(merchantService.findById(1L)).thenReturn(inactiveMerchant);
+        Merchant merchant = new Merchant();
+        merchant.setId(1L);
+        merchant.setStatus(MerchantStatus.ACTIVE);
+        UserSecurity userSecurity = mock(UserSecurity.class);
+        when(userCredentialsService.getCurrentUserCredentials()).thenReturn(userSecurity);
+        when(userSecurity.getUserCredentials()).thenReturn(merchant);
 
         String result = strategy.validateTransaction(transaction);
         assertEquals("ReferenceId should not be provided for AUTHORIZE Transactions", result);

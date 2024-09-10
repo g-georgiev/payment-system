@@ -14,6 +14,7 @@ import system.payments.poc.repository.AuthorizeTransactionRepository;
 import system.payments.poc.repository.ChargeTransactionRepository;
 import system.payments.poc.repository.RefundTransactionRepository;
 import system.payments.poc.service.MerchantService;
+import system.payments.poc.service.UserCredentialsService;
 import system.payments.poc.template.TransactionProcessingTemplate;
 
 import java.util.UUID;
@@ -21,16 +22,19 @@ import java.util.UUID;
 @Component
 public class RefundTransactionProcessingTemplate extends TransactionProcessingTemplate {
 
+    private final MerchantService merchantService;
     private final RefundTransactionRepository transactionRepository;
     private final ChargeTransactionRepository referenceTransactionRepository;
     private final AuthorizeTransactionRepository authorizeTransactionRepository;
 
     public RefundTransactionProcessingTemplate(MerchantService merchantService,
+                                               UserCredentialsService userCredentialsService,
                                                TransactionFactory refundTransactionFactory,
                                                RefundTransactionRepository transactionRepository,
                                                ChargeTransactionRepository referenceTransactionRepository,
                                                AuthorizeTransactionRepository authorizeTransactionRepository) {
-        super(merchantService, refundTransactionFactory);
+        super(userCredentialsService, refundTransactionFactory);
+        this.merchantService = merchantService;
         this.transactionRepository = transactionRepository;
         this.referenceTransactionRepository = referenceTransactionRepository;
         this.authorizeTransactionRepository = authorizeTransactionRepository;

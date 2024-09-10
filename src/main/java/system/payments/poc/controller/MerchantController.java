@@ -1,6 +1,7 @@
 package system.payments.poc.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
@@ -27,6 +28,7 @@ import system.payments.poc.service.MerchantService;
 @Validated
 @RequestMapping("/merchant")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearerAuth")
 public class MerchantController {
     private final MerchantService merchantService;
 

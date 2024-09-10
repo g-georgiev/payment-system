@@ -6,19 +6,19 @@ import system.payments.poc.dto.TransactionInputDto;
 import system.payments.poc.factory.TransactionFactory;
 import system.payments.poc.model.Merchant;
 import system.payments.poc.model.Transaction;
-import system.payments.poc.service.MerchantService;
+import system.payments.poc.service.UserCredentialsService;
 
 import java.util.Objects;
 import java.util.UUID;
 
 @RequiredArgsConstructor
 public abstract class TransactionProcessingTemplate {
-    protected final MerchantService merchantService;
+    private final UserCredentialsService userCredentialsService;
 
     private final TransactionFactory transactionFactory;
 
-    protected Merchant supplyMerchant(Long merchantId) {
-        return merchantService.findById(merchantId);
+    private Merchant supplyMerchant() {
+        return (Merchant) userCredentialsService.getCurrentUserCredentials().getUserCredentials();
     }
 
     protected Transaction supplyReference(UUID transactionId) {
@@ -42,7 +42,7 @@ public abstract class TransactionProcessingTemplate {
         if (Objects.nonNull(referenceId)) {
             referenceTransaction = supplyReference(referenceId);
         } else {
-            merchant = supplyMerchant(transactionInputDto.getMerchantId());
+            merchant = supplyMerchant();
         }
 
         return transactionFactory.createTransaction(transactionInputDto, merchant, referenceTransaction);

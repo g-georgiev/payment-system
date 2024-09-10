@@ -10,7 +10,6 @@ public class TransactionTestUtil {
         return TransactionInputDto.builder()
                 .customerEmail("test@test.com")
                 .customerPhone("1234567890")
-                .merchantId(1L)
                 .referenceId(UUID.randomUUID())
                 .amount(BigDecimal.TEN)
                 .build();

@@ -28,5 +28,5 @@ public class TransactionOutputDto {
 
     private BigDecimal amount;
 
-    private TransactionOutputDto referenceTransaction;
+    private UUID referenceTransactionUuid;
 }

@@ -39,13 +39,13 @@ public class DefaultTransactionService implements TransactionService {
     @PreAuthorize("hasRole('ROLE_MERCHANT')")
     public List<TransactionOutputDto> getCurrentUserTransactions() {
         Long merchantId = userCredentialsService.getCurrentUserCredentials().getUserCredentials().getId();
-        return transactionRepository.findAllByMerchant_IdOrderByCreationDate(merchantId).stream().map(transactionMapper::toDto).toList();
+        return transactionRepository.findAllByMerchant_IdOrderByCreationDateDesc(merchantId).stream().map(transactionMapper::toDto).toList();
     }
 
     @Override
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<TransactionOutputDto> getTransactions(Long merchantId) {
-        return transactionRepository.findAllByMerchant_IdOrderByCreationDate(merchantId).stream().map(transactionMapper::toDto).toList();
+        return transactionRepository.findAllByMerchant_IdOrderByCreationDateDesc(merchantId).stream().map(transactionMapper::toDto).toList();
     }
 
     @Transactional

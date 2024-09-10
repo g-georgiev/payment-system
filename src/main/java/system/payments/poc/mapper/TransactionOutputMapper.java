@@ -15,6 +15,10 @@ public interface TransactionOutputMapper {
     @AfterMapping
     default void addTransactionType(Transaction entity, @MappingTarget TransactionOutputDto dto) {
         dto.setTransactionType(Objects.requireNonNullElse(entity.getTransactionType(), entity.getClass().getSimpleName()));
+        Transaction referenceTransaction = entity.getReferenceTransaction();
+        if (Objects.nonNull(referenceTransaction)) {
+            dto.setReferenceTransactionUuid(referenceTransaction.getUuid());
+        }
     }
 
 }

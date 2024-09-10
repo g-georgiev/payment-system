@@ -1,5 +1,6 @@
 package system.payments.poc.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,7 @@ public class AuthController {
 
     @GetMapping("/admin/{username}")
     @ResponseStatus(HttpStatus.OK)
+    @SecurityRequirement(name = "bearerAuth")
     public UserDTO getUser(@PathVariable String username) {
         return userCredentialsService.getAdminByUserName(username);
     }

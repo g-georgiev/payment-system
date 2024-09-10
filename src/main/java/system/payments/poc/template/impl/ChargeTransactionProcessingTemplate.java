@@ -9,6 +9,7 @@ import system.payments.poc.model.Transaction;
 import system.payments.poc.repository.AuthorizeTransactionRepository;
 import system.payments.poc.repository.ChargeTransactionRepository;
 import system.payments.poc.service.MerchantService;
+import system.payments.poc.service.UserCredentialsService;
 import system.payments.poc.template.TransactionProcessingTemplate;
 
 import java.util.UUID;
@@ -16,14 +17,17 @@ import java.util.UUID;
 @Component
 public class ChargeTransactionProcessingTemplate extends TransactionProcessingTemplate {
 
+    private final MerchantService merchantService;
     private final ChargeTransactionRepository transactionRepository;
     private final AuthorizeTransactionRepository referenceTransactionRepository;
 
     public ChargeTransactionProcessingTemplate(MerchantService merchantService,
                                                TransactionFactory chargeTransactionFactory,
+                                               UserCredentialsService userCredentialsService,
                                                ChargeTransactionRepository transactionRepository,
                                                AuthorizeTransactionRepository referenceTransactionRepository) {
-        super(merchantService, chargeTransactionFactory);
+        super(userCredentialsService, chargeTransactionFactory);
+        this.merchantService = merchantService;
         this.transactionRepository = transactionRepository;
         this.referenceTransactionRepository = referenceTransactionRepository;
     }

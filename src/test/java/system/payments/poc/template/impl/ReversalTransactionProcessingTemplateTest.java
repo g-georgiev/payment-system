@@ -10,7 +10,7 @@ import system.payments.poc.model.ReversalTransaction;
 import system.payments.poc.model.Transaction;
 import system.payments.poc.repository.AuthorizeTransactionRepository;
 import system.payments.poc.repository.ReversalTransactionRepository;
-import system.payments.poc.service.MerchantService;
+import system.payments.poc.service.UserCredentialsService;
 
 import java.util.UUID;
 
@@ -28,12 +28,12 @@ class ReversalTransactionProcessingTemplateTest {
     @CsvSource({"APPROVED", "ERROR"})
     public void test_process_valid_reversal_transaction_successfully(String status) {
         // Arrange
-        MerchantService merchantService = mock(MerchantService.class);
+        UserCredentialsService userCredentialsService = mock(UserCredentialsService.class);
         TransactionFactory transactionFactory = mock(TransactionFactory.class);
         ReversalTransactionRepository reversalTransactionRepository = mock(ReversalTransactionRepository.class);
         AuthorizeTransactionRepository authorizeTransactionRepository = mock(AuthorizeTransactionRepository.class);
         ReversalTransactionProcessingTemplate template = new ReversalTransactionProcessingTemplate(
-                merchantService, transactionFactory, reversalTransactionRepository, authorizeTransactionRepository
+                userCredentialsService, transactionFactory, reversalTransactionRepository, authorizeTransactionRepository
         );
 
         UUID referenceId = UUID.randomUUID();
