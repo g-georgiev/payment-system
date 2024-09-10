@@ -8,6 +8,8 @@ jwt:
   token_validity: 120
 
 spring:
+  flyway:
+    locations: classpath:db/migration
   batch:
     jdbc:
       initialize-schema: ALWAYS
@@ -22,9 +24,16 @@ spring:
     username: ${DB_USER:payment_admin}
   jpa:
     properties:
+#      javax:
+#        persistence:
+#          schema-generation:
+#            create-source: metadata
+#            scripts:
+#              action: create
+#              create-target: db-init.sql
       show-sql: true
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     open-in-view: false
