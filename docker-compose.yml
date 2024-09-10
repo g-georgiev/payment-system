@@ -3,6 +3,7 @@ services:
 
   app:
     build:
+      context: .
       dockerfile: Dockerfile
     image: app:test
     container_name: payment_system_poc

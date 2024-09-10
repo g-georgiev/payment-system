@@ -21,9 +21,19 @@ The following transaction types can be posted with the provided endpoints:
  * **Reversal transaction** - Invalidates an authorize transaction 
 
 ### User credentials
-The developed system supports authentication and authorization via JWT. For that reason it also includes a very light 
-user management system. 
+The developed system supports authentication and authorization via JWT. For that reason it also includes a very light user management system. 
 
+To authenticate as a merchant and get a JWT use the following endpoint:
+```
+POST http://localhost:8080/token
+{
+    "username": "info@acmecorp.com",
+    "password": "<merchant password>"
+}
+
+Response:
+eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1aXRlc3QzIiwicm9sZSI6Ik1FUkNIQU5UIiwiaX...
+```
 TODO: This part is underdeveloped and can be further extended with more operations to be done on the users as well as extended authorization mechanism.
 
 ## General flows
